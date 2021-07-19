@@ -12,11 +12,12 @@ class Text {
   Text(SDL_Renderer *renderer, TTF_Font *font, SDL_Color color, std::string text);
   ~Text();
   void Free();
-  void Render(int x,
-              int y);
+  void Render(int x, int y);
   int GetWidth() const;
   int GetHeight() const;
+  std::string GetString() const;
  private:
+  std::string text_string_;
   SDL_Texture *texture_;
   SDL_Renderer *renderer_;
   int width_;

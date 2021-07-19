@@ -1,7 +1,11 @@
 #include <SDL2/SDL.h>
 #include <SDL2_ttf/SDL_ttf.h>
-#include <text.h>
+#include <map>
+#include <vector>
 #include <fmt/core.h>
+
+#include <text.h>
+#include <word_pair_file_loader.h>
 
 namespace cross_language_match {
 
@@ -12,6 +16,7 @@ void Draw();
 SDL_Window *kWindow = nullptr;
 SDL_Renderer *kRenderer = nullptr;
 TTF_Font *kFont = nullptr;
+SDL_Color kTextColor = {0, 0, 0};
 
 void Init() {
 
@@ -69,7 +74,14 @@ void Draw() {
   SDL_Event e;
   bool quit = false;
 
-  Text *text = new Text(kRenderer, kFont, {0x00, 0x00, 0x00}, "Hello World!");
+  WordPairFileLoader file_loader = WordPairFileLoader("assets/txt/test-pairs.csv");
+  std::map<std::string, std::string> *word_pair_strings = file_loader.GetWordPairs();
+  std::vector<Text *> left_words;
+  std::vector<Text *> right_words;
+  for (auto &word_pair_string : *word_pair_strings) {
+    left_words.push_back(new Text(kRenderer, kFont, kTextColor, word_pair_string.first));
+    right_words.push_back(new Text(kRenderer, kFont, kTextColor, word_pair_string.second));
+  }
 
   while (!quit) {
 
@@ -82,8 +94,16 @@ void Draw() {
     }
     SDL_RenderClear(kRenderer);
 
-    text->Render(100, 100);
-
+    int y = 100;
+    for (auto &left_word : left_words) {
+      left_word->Render(100, y);
+      y += 50;
+    }
+    y = 100;
+    for (auto &right_word : right_words) {
+      right_word->Render(200, y);
+      y += 50;
+    }
     SDL_RenderPresent(kRenderer);
 
   }

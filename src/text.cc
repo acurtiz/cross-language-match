@@ -8,21 +8,22 @@ namespace cross_language_match {
 Text::Text(SDL_Renderer *renderer, TTF_Font *font, SDL_Color color, std::string text) {
 
   renderer_ = renderer;
+  text_string_ = text;
 
-  SDL_Surface *textSurface = TTF_RenderText_Blended(font, text.c_str(), color);
-  if (textSurface == nullptr) {
+  SDL_Surface *text_surface = TTF_RenderText_Blended(font, text.c_str(), color);
+  if (text_surface == nullptr) {
     throw std::runtime_error(fmt::format("Unable to render text surface, error: {}\n", TTF_GetError()));
   }
 
-  texture_ = SDL_CreateTextureFromSurface(renderer_, textSurface);
+  texture_ = SDL_CreateTextureFromSurface(renderer_, text_surface);
   if (texture_ == nullptr) {
     throw std::runtime_error(fmt::format("Unable to create texture from surface, error: {}\n", SDL_GetError()));
   }
 
-  width_ = textSurface->w;
-  height_ = textSurface->h;
+  width_ = text_surface->w;
+  height_ = text_surface->h;
 
-  SDL_FreeSurface(textSurface);
+  SDL_FreeSurface(text_surface);
 
 }
 
@@ -54,6 +55,10 @@ int Text::GetWidth() const {
 
 int Text::GetHeight() const {
   return height_;
+}
+
+std::string Text::GetString() const {
+  return text_string_;
 }
 
 }
