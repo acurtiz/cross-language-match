@@ -82,10 +82,10 @@ void Draw() {
 
   for (auto word_pair_string : *word_pair_strings) {
     left_words.push_back(
-        new InteractiveText(kRenderer, new Text(kRenderer, kFont, kTextColor, word_pair_string.first))
+        new InteractiveText(kRenderer, new Text(kRenderer, kFont, kTextColor, word_pair_string.first), LEFT)
     );
     right_words.push_back(
-        new InteractiveText(kRenderer, new Text(kRenderer, kFont, kTextColor, word_pair_string.second))
+        new InteractiveText(kRenderer, new Text(kRenderer, kFont, kTextColor, word_pair_string.second), RIGHT)
     );
   }
 
@@ -103,7 +103,7 @@ void Draw() {
       }
 
       for (auto &word : all_words) {
-        word->HandleEvent(&e);
+        word->HandleEvent(&e, all_words);
       }
 
     }

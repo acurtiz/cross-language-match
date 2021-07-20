@@ -23,8 +23,6 @@ Text::Text(SDL_Renderer *renderer, TTF_Font *font, SDL_Color color, std::string 
   width_ = text_surface->w;
   height_ = text_surface->h;
 
-  printf("Text width (%d), height (%d)", width_, height_);
-
   SDL_FreeSurface(text_surface);
 
 }
