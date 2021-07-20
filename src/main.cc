@@ -5,6 +5,7 @@
 #include <fmt/core.h>
 
 #include <text.h>
+#include <interactive_text.h>
 #include <word_pair_file_loader.h>
 
 namespace cross_language_match {
@@ -76,11 +77,15 @@ void Draw() {
 
   WordPairFileLoader file_loader = WordPairFileLoader("assets/txt/test-pairs.csv");
   std::map<std::string, std::string> *word_pair_strings = file_loader.GetWordPairs();
-  std::vector<Text *> left_words;
-  std::vector<Text *> right_words;
-  for (auto &word_pair_string : *word_pair_strings) {
-    left_words.push_back(new Text(kRenderer, kFont, kTextColor, word_pair_string.first));
-    right_words.push_back(new Text(kRenderer, kFont, kTextColor, word_pair_string.second));
+  std::vector<InteractiveText *> left_words;
+  std::vector<InteractiveText *> right_words;
+  for (auto word_pair_string : *word_pair_strings) {
+    left_words.push_back(
+        new InteractiveText(kRenderer, new Text(kRenderer, kFont, kTextColor, word_pair_string.first))
+    );
+    right_words.push_back(
+        new InteractiveText(kRenderer, new Text(kRenderer, kFont, kTextColor, word_pair_string.second))
+    );
   }
 
   while (!quit) {
@@ -92,6 +97,9 @@ void Draw() {
       }
 
     }
+
+    // Clear the screen white
+    SDL_SetRenderDrawColor(kRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(kRenderer);
 
     int y = 100;
