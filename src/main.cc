@@ -79,6 +79,7 @@ void Draw() {
   std::map<std::string, std::string> *word_pair_strings = file_loader.GetWordPairs();
   std::vector<InteractiveText *> left_words;
   std::vector<InteractiveText *> right_words;
+
   for (auto word_pair_string : *word_pair_strings) {
     left_words.push_back(
         new InteractiveText(kRenderer, new Text(kRenderer, kFont, kTextColor, word_pair_string.first))
@@ -88,12 +89,21 @@ void Draw() {
     );
   }
 
+  // Maintain convenience vector to afford handle on all words
+  std::vector<InteractiveText *> all_words;
+  all_words.insert(all_words.end(), left_words.begin(), left_words.end());
+  all_words.insert(all_words.end(), right_words.begin(), right_words.end());
+
   while (!quit) {
 
     while (SDL_PollEvent(&e)) {
 
       if (e.type == SDL_QUIT) {
         quit = true;
+      }
+
+      for (auto &word : all_words) {
+        word->HandleEvent(&e);
       }
 
     }
@@ -104,12 +114,14 @@ void Draw() {
 
     int y = 100;
     for (auto &left_word : left_words) {
-      left_word->Render(100, y);
+      left_word->SetTopLeftPosition(100, y);
+      left_word->Render();
       y += 50;
     }
     y = 100;
     for (auto &right_word : right_words) {
-      right_word->Render(200, y);
+      right_word->SetTopLeftPosition(200, y);
+      right_word->Render();
       y += 50;
     }
     SDL_RenderPresent(kRenderer);

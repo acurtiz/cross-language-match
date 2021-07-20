@@ -19,13 +19,20 @@ class InteractiveText {
   void AddLink(InteractiveText *other);
   void RemoveLink();
   InteractiveText *GetLink();
-  void Render(int x, int y);
+  void SetTopLeftPosition(int x, int y);
+  void Render();
+  void HandleEvent(SDL_Event *event);
   Text *GetText();
  private:
+  int text_padding_per_side_ = 5;
   SDL_Renderer *renderer_;
   Text *text_;
   InteractiveText *linked_interactive_text_;
   bool is_highlighted_;
+  int top_left_x_;
+  int top_left_y_;
+  int width_;
+  int height_;
 };
 
 }
