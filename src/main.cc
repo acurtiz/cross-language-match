@@ -7,12 +7,15 @@
 #include <text.h>
 #include <interactive_text.h>
 #include <word_pair_file_loader.h>
+#include <button.h>
 
 namespace cross_language_match {
 
 void Init();
 void Close();
 void Draw();
+bool AreAllWordsLinkedAndCorrect(std::vector<InteractiveText *> all_words,
+                                 std::map<std::string, std::string> *expected_word_pairs);
 
 SDL_Window *kWindow = nullptr;
 SDL_Renderer *kRenderer = nullptr;
@@ -77,10 +80,10 @@ void Draw() {
 
   WordPairFileLoader file_loader = WordPairFileLoader("assets/txt/test-pairs.csv");
   std::map<std::string, std::string> *word_pair_strings = file_loader.GetWordPairs();
+
   std::vector<InteractiveText *> left_words;
   std::vector<InteractiveText *> right_words;
-
-  for (auto word_pair_string : *word_pair_strings) {
+  for (auto &word_pair_string : *word_pair_strings) {
     left_words.push_back(
         new InteractiveText(kRenderer, new Text(kRenderer, kFont, kTextColor, word_pair_string.first), LEFT)
     );
@@ -89,10 +92,12 @@ void Draw() {
     );
   }
 
-  // Maintain convenience vector to afford handle on all words
   std::vector<InteractiveText *> all_words;
   all_words.insert(all_words.end(), left_words.begin(), left_words.end());
   all_words.insert(all_words.end(), right_words.begin(), right_words.end());
+
+  Button *submit_button = new Button(kRenderer, 50, 50);
+  ButtonEvent submit_button_event = NONE;
 
   while (!quit) {
 
@@ -106,12 +111,23 @@ void Draw() {
         word->HandleEvent(&e, all_words);
       }
 
+      submit_button_event = submit_button->HandleEvent(&e);
+      if (submit_button_event == PRESSED) {
+        if (AreAllWordsLinkedAndCorrect(all_words, word_pair_strings)) {
+          printf("All matches are correct!\n");
+        } else {
+          printf("Incorrect; try again!\n");
+        }
+
+      }
+
     }
 
-    // Clear the screen white
+    // Clear the screen (set it to white)
     SDL_SetRenderDrawColor(kRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(kRenderer);
 
+    // Render the words
     int y = 100;
     for (auto &left_word : left_words) {
       left_word->SetTopLeftPosition(100, y);
@@ -124,9 +140,52 @@ void Draw() {
       right_word->Render();
       y += 50;
     }
+
+    // Render the button
+    submit_button->SetTopLeftPosition(300, y + 100);
+    submit_button->Render();
+
     SDL_RenderPresent(kRenderer);
 
   }
+
+}
+
+bool AreAllWordsLinkedAndCorrect(std::vector<InteractiveText *> all_words,
+                                 std::map<std::string, std::string> *expected_word_pairs) {
+
+  // Ensure all words have been paired up
+  for (auto &word : all_words) {
+    if (word->GetLink() == nullptr) {
+      printf("Word (%s) is not paired up; all words must be paired up for submission to occur.\n",
+             word->GetText()->GetString().c_str());
+      return false;
+    }
+  }
+
+  for (auto &word : all_words) {
+
+    // Only need to inspect left words since they've been shown to be paired to all right words already
+    if (word->GetGroup() != LEFT) {
+      continue;
+    }
+
+    std::string left_word_str = word->GetText()->GetString();
+    std::string actual_linked_right_word = word->GetLink()->GetText()->GetString();
+    std::string expected_linked_right_word = (*expected_word_pairs)[left_word_str];
+
+    if (actual_linked_right_word != expected_linked_right_word) {
+      printf(
+          "Left word (%s) is linked to right word (%s) but this is incorrect; expected it to be linked to (%s)\n",
+          left_word_str.c_str(),
+          actual_linked_right_word.c_str(),
+          expected_linked_right_word.c_str());
+      return false;
+    }
+
+  }
+
+  return true;
 
 }
 

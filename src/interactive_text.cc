@@ -188,6 +188,10 @@ Text *InteractiveText::GetText() {
   return text_;
 }
 
+InteractiveTextGroup InteractiveText::GetGroup() {
+  return group_;
+}
+
 InteractiveText *InteractiveText::GetHighlightedOtherFromSameGroup(std::vector<InteractiveText *> all_text) {
 
   for (auto &single_text : all_text) {

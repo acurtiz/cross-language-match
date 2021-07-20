@@ -1,7 +1,3 @@
-//
-// Created by Alex Curtis on 7/20/21.
-//
-
 #include <SDL2/SDL.h>
 #include <text.h>
 #include <vector>
@@ -29,6 +25,7 @@ class InteractiveText {
   void Render();
   void HandleEvent(SDL_Event *event, std::vector<InteractiveText *> all_text);
   Text *GetText();
+  InteractiveTextGroup GetGroup();
  private:
   int text_padding_per_side_ = 5;
   SDL_Renderer *renderer_;
