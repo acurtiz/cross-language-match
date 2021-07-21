@@ -12,7 +12,7 @@ class GameHelper {
   friend class Game;
   static bool AreAllWordsLinkedAndCorrect(std::vector<InteractiveText *> *all_words,
                                           std::map<std::string, std::string> *expected_word_pairs);
-  static void Shuffle(std::vector<InteractiveText *> *words);
+  static void Shuffle(std::vector<InteractiveText *> *vector);
   static std::vector<InteractiveText *> *GetUnifiedVector(std::vector<InteractiveText *> *a,
                                                           std::vector<InteractiveText *> *b);
 

@@ -15,10 +15,13 @@ class Game {
  public:
   Game();
   ~Game();
-  void LoadWords(std::string file_path);
+  void LoadWordPairs(std::string file_path);
   void LoopDrawUntilQuit();
 
  private:
+
+  void PrepareCurrentWords();
+  void CleanCurrentWords();
 
   SDL_Window *window_ = nullptr;
   SDL_Renderer *renderer_ = nullptr;
@@ -27,8 +30,11 @@ class Game {
 
   std::vector<InteractiveText *> *left_words_ = nullptr;
   std::vector<InteractiveText *> *right_words_ = nullptr;
-  std::vector<InteractiveText *> *all_words_ = nullptr;
-  std::map<std::string, std::string> *correct_word_pair_strings_ = nullptr;
+  std::vector<InteractiveText *> *left_and_right_words_ = nullptr;
+  std::map<std::string, std::string> *remaining_word_pairs_ = nullptr;
+  std::map<std::string, std::string> *current_word_pairs_ = nullptr;
+
+  const int words_to_present_per_round_ = 10;
 
 };
 

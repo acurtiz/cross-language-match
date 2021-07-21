@@ -53,50 +53,51 @@ Game::~Game() {
   TTF_Quit();
   SDL_Quit();
 
-  delete correct_word_pair_strings_;
+  CleanCurrentWords();
 
-  for (auto &word : *left_words_) {
-    if (word != nullptr) {
-      delete word->GetText();
-    }
-    delete word;
-  }
-  delete left_words_;
-
-  for (auto &word : *right_words_) {
-    if (word != nullptr) {
-      delete word->GetText();
-    }
-    delete word;
-  }
-  delete right_words_;
-
-  // all_words_ is either:
-  //   nullptr already (if LoadWords was invoked)
-  //   OR it holds all of the pointers already contained in left_words_ and right_words_ (if LoadWords was invoked)
-  // In neither case do we want to invoke delete on the contents of it; hence, we just delete the container
-  delete all_words_;
-
+  delete remaining_word_pairs_;
 }
 
-void Game::LoadWords(std::string file_path) {
+void Game::LoadWordPairs(std::string file_path) {
 
-  if (correct_word_pair_strings_ != nullptr) {
-    printf("LoadWords has already been invoked; this is thus a no-op. Use a new Game object in order to load a"
+  if (remaining_word_pairs_ != nullptr) {
+    printf("LoadWordPairs has already been invoked; this is thus a no-op. Use a new Game object in order to load a"
            " different word set");
     return;
   }
 
-  correct_word_pair_strings_ = WordPairFileLoader::GetWordPairs(file_path);
+  remaining_word_pairs_ = WordPairFileLoader::GetWordPairs(file_path);
+
+}
+
+void Game::PrepareCurrentWords() {
+
+  CleanCurrentWords();
 
   left_words_ = new std::vector<InteractiveText *>();
   right_words_ = new std::vector<InteractiveText *>();
-  for (auto &word_pair_string : *correct_word_pair_strings_) {
+  current_word_pairs_ = new std::map<std::string, std::string>();
+
+  // Move a subset of words from remaining_correct_word_pairs to current_correct_word_pairs
+  int remaining_count = words_to_present_per_round_;
+  for (auto &word_pair : *remaining_word_pairs_) {
+    if (remaining_count == 0) {
+      break;
+    }
+    current_word_pairs_->insert(word_pair);
+    remaining_count--;
+  }
+  for (auto &word_pair : *current_word_pairs_) {
+    remaining_word_pairs_->erase(word_pair.first);
+  }
+
+  // Allocate new InteractiveText objects for current word pairs and add them to the vectors
+  for (auto &word_pair : *current_word_pairs_) {
     left_words_->push_back(
-        new InteractiveText(renderer_, new Text(renderer_, font_, text_color_, word_pair_string.first), LEFT)
+        new InteractiveText(renderer_, new Text(renderer_, font_, text_color_, word_pair.first), LEFT)
     );
     right_words_->push_back(
-        new InteractiveText(renderer_, new Text(renderer_, font_, text_color_, word_pair_string.second), RIGHT)
+        new InteractiveText(renderer_, new Text(renderer_, font_, text_color_, word_pair.second), RIGHT)
     );
   }
 
@@ -104,7 +105,39 @@ void Game::LoadWords(std::string file_path) {
   GameHelper::Shuffle(left_words_);
   GameHelper::Shuffle(right_words_);
 
-  all_words_ = GameHelper::GetUnifiedVector(left_words_, right_words_);
+  left_and_right_words_ = GameHelper::GetUnifiedVector(left_words_, right_words_);
+
+}
+
+void Game::CleanCurrentWords() {
+
+  if (left_words_ != nullptr) {
+    for (auto &word : *left_words_) {
+      if (word != nullptr) {
+        delete word->GetText();
+      }
+      delete word;
+    }
+    delete left_words_;
+  }
+
+  if (right_words_ != nullptr) {
+    for (auto &word : *right_words_) {
+      if (word != nullptr) {
+        delete word->GetText();
+      }
+      delete word;
+    }
+    delete right_words_;
+  }
+
+  // left_and_right_words_ is either:
+  //   nullptr already (if LoadWordPairs was invoked)
+  //   OR it holds all of the pointers already contained in left_words_ and right_words_ (if LoadWordPairs was invoked)
+  // In neither case do we want to invoke delete on the contents of it; hence, we just delete the container
+  delete left_and_right_words_;
+
+  delete current_word_pairs_;
 
 }
 
@@ -114,11 +147,14 @@ void Game::LoopDrawUntilQuit() {
   SDL_RenderClear(renderer_);
   SDL_RenderPresent(renderer_);
 
+  PrepareCurrentWords();
+
   Button *submit_button = new Button(renderer_, 50, 50);
   ButtonEvent submit_button_event = NONE;
 
   SDL_Event e;
   bool quit = false;
+
   while (!quit) {
 
     while (SDL_PollEvent(&e)) {
@@ -127,14 +163,24 @@ void Game::LoopDrawUntilQuit() {
         quit = true;
       }
 
-      for (auto &word : *all_words_) {
-        word->HandleEvent(&e, *all_words_);
+      for (auto &word : *left_and_right_words_) {
+        word->HandleEvent(&e, *left_and_right_words_);
       }
 
       submit_button_event = submit_button->HandleEvent(&e);
+
       if (submit_button_event == PRESSED) {
-        if (GameHelper::AreAllWordsLinkedAndCorrect(all_words_, correct_word_pair_strings_)) {
-          printf("All matches are correct!\n");
+
+        if (GameHelper::AreAllWordsLinkedAndCorrect(left_and_right_words_, current_word_pairs_)) {
+
+          if (remaining_word_pairs_->empty()) {
+            printf("Correct! Game is over! All words done!\n");
+            quit = true;
+          } else {
+            printf("Correct! Preparing next set of words!\n");
+            PrepareCurrentWords();
+          }
+
         } else {
           printf("Incorrect; try again!\n");
         }

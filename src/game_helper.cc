@@ -5,10 +5,10 @@
 
 namespace cross_language_match {
 
-void GameHelper::Shuffle(std::vector<InteractiveText *> *words) {
+void GameHelper::Shuffle(std::vector<InteractiveText *> *vector) {
 
-  std::shuffle(words->begin(),
-               words->end(),
+  std::shuffle(vector->begin(),
+               vector->end(),
                std::default_random_engine(std::chrono::system_clock::now().time_since_epoch().count())
   );
 
