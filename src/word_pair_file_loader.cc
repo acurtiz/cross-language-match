@@ -47,8 +47,8 @@ WordPairFileLoader::~WordPairFileLoader() {
   delete word_pairs_;
 }
 
-std::map<std::string, std::string> *WordPairFileLoader::GetWordPairs() {
-  return word_pairs_;
+std::map<std::string, std::string> WordPairFileLoader::GetWordPairs() {
+  return *word_pairs_;
 }
 
 }
