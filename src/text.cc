@@ -10,7 +10,7 @@ Text::Text(SDL_Renderer *renderer, TTF_Font *font, SDL_Color color, std::string 
   renderer_ = renderer;
   text_string_ = text;
 
-  SDL_Surface *text_surface = TTF_RenderText_Blended(font, text.c_str(), color);
+  SDL_Surface *text_surface = TTF_RenderUTF8_Blended(font, text.c_str(), color);
   if (text_surface == nullptr) {
     throw std::runtime_error(fmt::format("Unable to render text surface, error: {}\n", TTF_GetError()));
   }

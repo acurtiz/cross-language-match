@@ -90,8 +90,6 @@ void Game::LoopDrawUntilQuit() {
   Button *submit_button = new Button(renderer_, 50, 50);
   ButtonEvent submit_button_event = NONE;
 
-  printf("9");
-
   SDL_Event e;
   bool quit = false;
   while (!quit) {
