@@ -1,6 +1,6 @@
 #include <SDL2/SDL.h>
-#include <text.h>
 #include <vector>
+#include "text.h"
 
 #ifndef CROSSLANGUAGEMATCH_SRC_INTERACTIVE_TEXT_H_
 #define CROSSLANGUAGEMATCH_SRC_INTERACTIVE_TEXT_H_

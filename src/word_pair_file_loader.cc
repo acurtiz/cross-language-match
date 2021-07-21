@@ -3,14 +3,14 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
-#include <word_pair_file_loader.h>
 #include <fmt/format.h>
+#include "word_pair_file_loader.h"
 
 namespace cross_language_match {
 
-WordPairFileLoader::WordPairFileLoader(std::string file_path) {
+std::map<std::string, std::string> *WordPairFileLoader::GetWordPairs(std::string file_path) {
 
-  word_pairs_ = new std::map<std::string, std::string>();
+  std::map<std::string, std::string> *word_pairs = new std::map<std::string, std::string>();
 
   std::string line;
   std::ifstream file(file_path);
@@ -33,7 +33,7 @@ WordPairFileLoader::WordPairFileLoader(std::string file_path) {
       std::string left_word = line.substr(0, comma_index);
       std::string right_word = line.substr(comma_index + 1);
 
-      word_pairs_->insert(std::pair<std::string, std::string>(left_word, right_word));
+      word_pairs->insert(std::pair<std::string, std::string>(left_word, right_word));
 
     }
     file.close();
@@ -41,14 +41,8 @@ WordPairFileLoader::WordPairFileLoader(std::string file_path) {
     throw std::runtime_error(fmt::format("Unable to open file {}", file_path));
   }
 
-}
+  return word_pairs;
 
-WordPairFileLoader::~WordPairFileLoader() {
-  delete word_pairs_;
-}
-
-std::map<std::string, std::string> WordPairFileLoader::GetWordPairs() {
-  return *word_pairs_;
 }
 
 }

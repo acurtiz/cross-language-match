@@ -8,11 +8,7 @@ namespace cross_language_match {
 
 class WordPairFileLoader {
  public:
-  WordPairFileLoader(std::string file_path);
-  ~WordPairFileLoader();
-  std::map<std::string, std::string> GetWordPairs();
- private:
-  std::map<std::string, std::string> *word_pairs_;
+  static std::map<std::string, std::string> *GetWordPairs(std::string file_path);
 };
 
 }

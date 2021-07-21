@@ -1,7 +1,7 @@
-#include "../include/text.h"
 #include <SDL2_ttf/SDL_ttf.h>
 #include <string>
 #include <fmt/format.h>
+#include "text.h"
 
 namespace cross_language_match {
 

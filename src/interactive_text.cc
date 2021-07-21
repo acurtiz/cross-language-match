@@ -1,7 +1,3 @@
-//
-// Created by Alex Curtis on 7/20/21.
-//
-
 #include <vector>
 #include "interactive_text.h"
 
