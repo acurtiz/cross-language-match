@@ -1,6 +1,6 @@
-#include <SDL2_ttf/SDL_ttf.h>
 #include <string>
-#include <fmt/format.h>
+#include <boost/format.hpp>
+#include <SDL2_ttf/SDL_ttf.h>
 #include "text.h"
 
 namespace cross_language_match {
@@ -12,12 +12,16 @@ Text::Text(SDL_Renderer *renderer, TTF_Font *font, SDL_Color color, std::string 
 
   SDL_Surface *text_surface = TTF_RenderUTF8_Blended(font, text.c_str(), color);
   if (text_surface == nullptr) {
-    throw std::runtime_error(fmt::format("Unable to render text surface, error: {}\n", TTF_GetError()));
+    throw std::runtime_error(
+        boost::str(boost::format("Unable to render text surface, error: %1\n") % TTF_GetError())
+    );
   }
 
   texture_ = SDL_CreateTextureFromSurface(renderer_, text_surface);
   if (texture_ == nullptr) {
-    throw std::runtime_error(fmt::format("Unable to create texture from surface, error: {}\n", SDL_GetError()));
+    throw std::runtime_error(
+        boost::str(boost::format("Unable to create texture from surface, error: %1\n") % SDL_GetError())
+    );
   }
 
   width_ = text_surface->w;

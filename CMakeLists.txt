@@ -39,12 +39,6 @@ find_library(SDL2_TTF_LIBRARY
         HINTS /Library/Frameworks)
 target_link_libraries(CrossLanguageMatch LINK_PUBLIC ${SDL2_TTF_LIBRARY})
 
-# Link to fmt library
-# https://github.com/fmtlib/fmt/releases/tag/8.0.1
-set(FMT_BUILD_DIRECTORY /Users/alex/Libraries/fmt-8.0.1/build)
-set(FMT_HEADER_DIRECTORY /Users/alex/Libraries/fmt-8.0.1/include)
-find_library(FMT_LIBRARY
-        NAMES fmt
-        HINTS ${FMT_BUILD_DIRECTORY})
-include_directories(${FMT_HEADER_DIRECTORY})
-target_link_libraries(CrossLanguageMatch LINK_PUBLIC ${FMT_LIBRARY})
+# Link to boost library
+set(BOOST_HEADER_DIRECTORY /Users/alex/Libraries/boost_1_76_0)
+include_directories(${BOOST_HEADER_DIRECTORY})

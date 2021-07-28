@@ -11,7 +11,7 @@ InteractiveText::InteractiveText(SDL_Renderer *renderer, Text *text, Interactive
   top_left_x_ = 0;
   top_left_y_ = 0;
   width_ = text_->GetWidth() + text_padding_per_side_ * 2;
-  height_ = text->GetHeight() + text_padding_per_side_ * 2;
+  height_ = text_->GetHeight() + text_padding_per_side_ * 2;
   group_ = group;
 }
 
@@ -80,13 +80,25 @@ void InteractiveText::Render() {
 
   SDL_Rect padding_rect = {top_left_x_, top_left_y_, width_, height_};
 
+  // The line should be drawn from the middle of the right edge of the *left* word to the middle of the left edge
+  // of the right word
+  InteractiveText *left_interactive_text;
+  InteractiveText *right_interactive_text;
+  if (group_ == LEFT) {
+    left_interactive_text = this;
+    right_interactive_text = linked_interactive_text_;
+  } else {
+    left_interactive_text = linked_interactive_text_;
+    right_interactive_text = this;
+  }
+
   if (linked_interactive_text_ != nullptr) {
     SDL_SetRenderDrawColor(renderer_, 0xDA, 0x70, 0xD6, 0xFF); // orchid
     SDL_RenderDrawLine(renderer_,
-                       top_left_x_ + width_ / 2,
-                       top_left_y_ + height_ / 2,
-                       linked_interactive_text_->top_left_x_ + linked_interactive_text_->width_ / 2,
-                       linked_interactive_text_->top_left_y_ + linked_interactive_text_->height_ / 2);
+                       left_interactive_text->top_left_x_ + left_interactive_text->width_,
+                       left_interactive_text->top_left_y_ + left_interactive_text->height_ / 2,
+                       right_interactive_text->top_left_x_,
+                       right_interactive_text->top_left_y_ + right_interactive_text->height_ / 2);
   }
 
   if (is_highlighted_) {
@@ -228,6 +240,18 @@ InteractiveText *InteractiveText::GetHighlightedOtherFromDifferentGroup(std::vec
 
   return nullptr;
 
+}
+
+int InteractiveText::GetWidth() {
+  return width_;
+}
+
+int InteractiveText::GetHeight() {
+  return height_;
+}
+
+int InteractiveText::GetPaddingPerSide() {
+  return text_padding_per_side_;
 }
 
 }

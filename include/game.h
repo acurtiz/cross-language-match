@@ -34,7 +34,18 @@ class Game {
   std::map<std::string, std::string> *remaining_word_pairs_ = nullptr;
   std::map<std::string, std::string> *current_word_pairs_ = nullptr;
 
-  const int words_to_present_per_round_ = 10;
+  const double screen_width_ = 1280;
+  const double screen_height_ = 720;
+  const double screen_height_percentage_reserved_for_words_ = 0.6;
+  const int padding_word_columns_ = 100;
+  const int font_size_ = 28;
+  const int padding_individual_words_ = 15;
+  const int submit_button_width_ = 100;
+  const int submit_button_height_ = 50;
+
+  // Words to be presented per round should be a function of the screen height
+  const int words_to_present_per_round_ = (int) (screen_height_ * screen_height_percentage_reserved_for_words_)
+      / (font_size_ + InteractiveText::GetPaddingPerSide() * 2 + padding_individual_words_);
 
 };
 

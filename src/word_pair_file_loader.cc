@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
-#include <fmt/format.h>
+#include <boost/format.hpp>
 #include "word_pair_file_loader.h"
 
 namespace cross_language_match {
@@ -19,15 +19,17 @@ std::map<std::string, std::string> *WordPairFileLoader::GetWordPairs(std::string
 
       std::size_t comma_occurrences = std::count(line.begin(), line.end(), ',');
       if (comma_occurrences != 1) {
-        throw std::runtime_error(fmt::format("Expected one comma per line, found line with {} occurrences. "
-                                             "Line: '{}'",
-                                             comma_occurrences,
-                                             line));
+        throw std::runtime_error(
+            boost::str(boost::format(
+                "Expected one comma per line, found line with %1 occurrences. Line: '%2'") % comma_occurrences % line)
+        );
       }
 
       std::size_t comma_index = line.find(',');
       if (comma_index == std::string::npos) {
-        throw std::runtime_error(fmt::format("Improperly formatted file, line without comma found: {}", line));
+        throw std::runtime_error(
+            boost::str(boost::format("Improperly formatted file, line without comma found: %1") % line)
+        );
       }
 
       std::string left_word = line.substr(0, comma_index);
@@ -38,7 +40,7 @@ std::map<std::string, std::string> *WordPairFileLoader::GetWordPairs(std::string
     }
     file.close();
   } else {
-    throw std::runtime_error(fmt::format("Unable to open file {}", file_path));
+    throw std::runtime_error(boost::str(boost::format("Unable to open file %1") % file_path));
   }
 
   return word_pairs;

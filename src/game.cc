@@ -1,5 +1,5 @@
 #include <SDL2/SDL.h>
-#include <fmt/format.h>
+#include <boost/format.hpp>
 #include "game.h"
 #include "game_helper.h"
 #include "button.h"
@@ -11,35 +11,43 @@ namespace cross_language_match {
 Game::Game() {
 
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
-    throw std::runtime_error(fmt::format("SDL could not initialize, error: {}\n", SDL_GetError()));
+    throw std::runtime_error(
+        boost::str(boost::format("SDL could not initialize, error: %1\n") % SDL_GetError())
+    );
   }
 
   window_ = SDL_CreateWindow("Cross Language Match",
                              SDL_WINDOWPOS_UNDEFINED,
                              SDL_WINDOWPOS_UNDEFINED,
-                             1080,
-                             800,
+                             screen_width_,
+                             screen_height_,
                              SDL_WINDOW_SHOWN);
 
   if (window_ == nullptr) {
-    throw std::runtime_error(fmt::format("Window could not be created, error: {}\n", SDL_GetError()));
+    throw std::runtime_error(
+        boost::str(boost::format("Window could not be created, error: %1\n") % SDL_GetError())
+    );
   }
 
   renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
 
   if (renderer_ == nullptr) {
-    throw std::runtime_error(fmt::format("Renderer could not be created, error: {}\n", SDL_GetError()));
+    throw std::runtime_error(
+        boost::str(boost::format("Renderer could not be created, error: %1\n") % SDL_GetError())
+    );
   }
   SDL_SetRenderDrawColor(renderer_, 0x00, 0x00, 0x00, 0xFF);
 
   if (TTF_Init() == -1) {
-    throw std::runtime_error(fmt::format("SDL_ttf could not be initialized, error: {}\n", TTF_GetError()));
+    throw std::runtime_error(
+        boost::str(boost::format("SDL_ttf could not be initialized, error: %1\n") % TTF_GetError())
+    );
   }
 
-  font_ = TTF_OpenFont("assets/fonts/OpenSans-Regular.ttf", 28);
+  font_ = TTF_OpenFont("assets/fonts/OpenSans-Regular.ttf", font_size_);
 
   if (font_ == NULL) {
-    throw std::runtime_error(fmt::format("Failed to load font, error: {}\n", TTF_GetError()));
+    throw std::runtime_error(boost::str(boost::format("Failed to load font, error: %1\n") % TTF_GetError()));
   }
 
 }
@@ -149,7 +157,7 @@ void Game::LoopDrawUntilQuit() {
 
   PrepareCurrentWords();
 
-  Button *submit_button = new Button(renderer_, 50, 50);
+  Button *submit_button = new Button(renderer_, submit_button_width_, submit_button_height_);
   ButtonEvent submit_button_event = NONE;
 
   SDL_Event e;
@@ -192,20 +200,23 @@ void Game::LoopDrawUntilQuit() {
     SDL_SetRenderDrawColor(renderer_, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(renderer_);
 
-    int y = 100;
+    // Render left column
+    int y = padding_individual_words_;
     for (auto &left_word : *left_words_) {
-      left_word->SetTopLeftPosition(100, y);
+      left_word->SetTopLeftPosition(padding_word_columns_, y);
       left_word->Render();
-      y += 50;
-    }
-    y = 100;
-    for (auto &right_word : *right_words_) {
-      right_word->SetTopLeftPosition(200, y);
-      right_word->Render();
-      y += 50;
+      y += left_word->GetHeight() + padding_individual_words_;
     }
 
-    submit_button->SetTopLeftPosition(300, y + 100);
+    // Render right column
+    y = padding_individual_words_;
+    for (auto &right_word : *right_words_) {
+      right_word->SetTopLeftPosition(screen_width_ - padding_word_columns_ - right_word->GetWidth(), y);
+      right_word->Render();
+      y += right_word->GetHeight() + padding_individual_words_;
+    }
+
+    submit_button->SetTopLeftPosition(padding_individual_words_, screen_height_ * 0.9);
     submit_button->Render();
 
     SDL_RenderPresent(renderer_);

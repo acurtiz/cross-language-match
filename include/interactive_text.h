@@ -26,8 +26,11 @@ class InteractiveText {
   void HandleEvent(SDL_Event *event, std::vector<InteractiveText *> all_text);
   Text *GetText();
   InteractiveTextGroup GetGroup();
+  int GetWidth();
+  int GetHeight();
+  static int GetPaddingPerSide();
  private:
-  int text_padding_per_side_ = 5;
+  static const int text_padding_per_side_ = 5;
   SDL_Renderer *renderer_;
   Text *text_;
   InteractiveText *linked_interactive_text_;
