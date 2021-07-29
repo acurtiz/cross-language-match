@@ -1,11 +1,11 @@
 #include <vector>
 #include <random>
-#include "game_helper.h"
+#include "game_utility.h"
 #include "interactive_text.h"
 
 namespace cross_language_match {
 
-void GameHelper::Shuffle(std::vector<InteractiveText *> *vector) {
+void GameUtility::Shuffle(std::vector<InteractiveText *> *vector) {
 
   std::shuffle(vector->begin(),
                vector->end(),
@@ -14,8 +14,8 @@ void GameHelper::Shuffle(std::vector<InteractiveText *> *vector) {
 
 }
 
-std::vector<InteractiveText *> *GameHelper::GetUnifiedVector(std::vector<InteractiveText *> *a,
-                                                             std::vector<InteractiveText *> *b) {
+std::vector<InteractiveText *> *GameUtility::GetUnifiedVector(std::vector<InteractiveText *> *a,
+                                                              std::vector<InteractiveText *> *b) {
 
   std::vector<InteractiveText *> *all_words = new std::vector<InteractiveText *>();
   all_words->insert(all_words->end(), a->begin(), a->end());
@@ -24,8 +24,8 @@ std::vector<InteractiveText *> *GameHelper::GetUnifiedVector(std::vector<Interac
 
 }
 
-bool GameHelper::AreAllWordsLinkedAndCorrect(std::vector<InteractiveText *> *all_words,
-                                             std::map<std::string, std::string> *expected_word_pairs) {
+bool GameUtility::AreAllWordsLinkedAndCorrect(std::vector<InteractiveText *> *all_words,
+                                              std::map<std::string, std::string> *expected_word_pairs) {
 
   // Ensure all words have been paired up
   for (auto &word : *all_words) {

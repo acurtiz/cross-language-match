@@ -7,7 +7,7 @@
 
 namespace cross_language_match {
 
-class GameHelper {
+class GameUtility {
  private:
   friend class Game;
   static bool AreAllWordsLinkedAndCorrect(std::vector<InteractiveText *> *all_words,

@@ -1,9 +1,9 @@
 #include <SDL2/SDL.h>
 #include <boost/format.hpp>
 #include "game.h"
-#include "game_helper.h"
-#include "button.h"
-#include "labeled_button.h"
+#include "game_utility.h"
+#include "button/button.h"
+#include "button/labeled_button.h"
 #include "interactive_text.h"
 #include "word_loader/file_word_loader.h"
 #include "word_loader/string_word_loader.h"
@@ -126,10 +126,10 @@ void Game::PrepareCurrentWords() {
   }
 
   // Shuffle so the words are not displayed at equal levels in the GUI
-  GameHelper::Shuffle(left_words_);
-  GameHelper::Shuffle(right_words_);
+  GameUtility::Shuffle(left_words_);
+  GameUtility::Shuffle(right_words_);
 
-  left_and_right_words_ = GameHelper::GetUnifiedVector(left_words_, right_words_);
+  left_and_right_words_ = GameUtility::GetUnifiedVector(left_words_, right_words_);
 
 }
 
@@ -205,7 +205,7 @@ void Game::LoopDrawUntilQuit() {
       submit_button_event = submit_button->HandleEvent(&e);
 
       if (submit_button_event == PRESSED) {
-        if (GameHelper::AreAllWordsLinkedAndCorrect(left_and_right_words_, current_word_pairs_)) {
+        if (GameUtility::AreAllWordsLinkedAndCorrect(left_and_right_words_, current_word_pairs_)) {
           printf("Correct! Preparing next set of words!\n");
           last_submission_was_incorrect = false;
           current_round_is_complete = true;
