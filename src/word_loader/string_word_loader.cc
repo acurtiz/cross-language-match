@@ -1,6 +1,6 @@
 #include <map>
 #include <sstream>
-#include "string_word_loader.h"
+#include "word_loader/string_word_loader.h"
 
 namespace cross_language_match {
 

@@ -4,7 +4,7 @@
 #include <string>
 #include <algorithm>
 #include <boost/format.hpp>
-#include "file_word_loader.h"
+#include "word_loader/file_word_loader.h"
 
 namespace cross_language_match {
 

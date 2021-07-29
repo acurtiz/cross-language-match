@@ -5,7 +5,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Target for generating executable
 include_directories(include)
-file(GLOB SOURCES "src/*.cc")
+file(GLOB_RECURSE SOURCES "src/*.cc")
 add_executable(CrossLanguageMatch ${SOURCES} assets/)
 
 # Target for copying assets into build directory.

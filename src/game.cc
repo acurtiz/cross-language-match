@@ -4,8 +4,8 @@
 #include "game_helper.h"
 #include "button.h"
 #include "interactive_text.h"
-#include "file_word_loader.h"
-#include "string_word_loader.h"
+#include "word_loader/file_word_loader.h"
+#include "word_loader/string_word_loader.h"
 
 namespace cross_language_match {
 
