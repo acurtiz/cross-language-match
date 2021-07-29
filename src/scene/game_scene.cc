@@ -29,7 +29,59 @@ GameScene::GameScene(SDL_Renderer *renderer, SDL_Window *window, bool &global_qu
 
 }
 
-GameScene::~GameScene() = default;
+GameScene::~GameScene() {
+
+  TTF_CloseFont(font_);
+  font_ = nullptr;
+  TTF_Quit();
+
+}
+
+void GameScene::RunPreLoop() {
+
+  SDL_SetRenderDrawColor(renderer_, 0xFF, 0xFF, 0xFF, 0xFF);
+  SDL_RenderClear(renderer_);
+  SDL_RenderPresent(renderer_);
+
+  PrepareCurrentWords();
+
+  incorrect_text_ = new Text(renderer_, font_, text_color_, "Incorrect; please try again.");
+  correct_text_ = new Text(renderer_, font_, text_color_, "Correct - well done!");
+
+  submit_text_ = new Text(renderer_, font_, text_color_, "Submit");
+  submit_button_ = new LabeledButton(renderer_, submit_button_width_, submit_button_height_, submit_text_);
+  next_round_text_ = new Text(renderer_, font_, text_color_, "Next Round");
+  next_round_button_ = new LabeledButton(renderer_, next_button_width_, next_button_height_, next_round_text_);
+
+  submit_button_event_ = NONE;
+  next_round_button_event_ = NONE;
+
+}
+
+void GameScene::RunPostLoop() {
+
+  delete incorrect_text_;
+  incorrect_text_ = nullptr;
+
+  delete correct_text_;
+  correct_text_ = nullptr;
+
+  delete submit_text_;
+  submit_text_ = nullptr;
+
+  delete submit_button_;
+  submit_button_ = nullptr;
+
+  delete next_round_text_;
+  next_round_text_ = nullptr;
+
+  delete next_round_button_;
+  next_round_button_ = nullptr;
+
+  submit_button_event_ = NONE;
+  next_round_button_event_ = NONE;
+
+}
 
 void GameScene::RunSingleIterationEventHandler(SDL_Event &event) {
 
@@ -114,52 +166,6 @@ void GameScene::RunSingleIterationLoopBody() {
   }
 
   SDL_RenderPresent(renderer_);
-
-}
-
-void GameScene::RunPostLoop() {
-
-  delete incorrect_text_;
-  incorrect_text_ = nullptr;
-
-  delete correct_text_;
-  correct_text_ = nullptr;
-
-  delete submit_text_;
-  submit_text_ = nullptr;
-
-  delete submit_button_;
-  submit_button_ = nullptr;
-
-  delete next_round_text_;
-  next_round_text_ = nullptr;
-
-  delete next_round_button_;
-  next_round_button_ = nullptr;
-
-  submit_button_event_ = NONE;
-  next_round_button_event_ = NONE;
-
-}
-
-void GameScene::RunPreLoop() {
-
-  SDL_SetRenderDrawColor(renderer_, 0xFF, 0xFF, 0xFF, 0xFF);
-  SDL_RenderClear(renderer_);
-  SDL_RenderPresent(renderer_);
-
-  PrepareCurrentWords();
-
-  incorrect_text_ = new Text(renderer_, font_, text_color_, "Incorrect; please try again.");
-  correct_text_ = new Text(renderer_, font_, text_color_, "Correct - well done!");
-
-  submit_text_ = new Text(renderer_, font_, text_color_, "Submit");
-  submit_button_ = new LabeledButton(renderer_, submit_button_width_, submit_button_height_, submit_text_);
-  next_round_text_ = new Text(renderer_, font_, text_color_, "Next Round");
-  next_round_button_ = new LabeledButton(renderer_, next_button_width_, next_button_height_, next_round_text_);
-
-  submit_button_event_ = NONE;
-  next_round_button_event_ = NONE;
 
 }
 

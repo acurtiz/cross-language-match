@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <boost/format.hpp>
+#include <scene/start_scene.h>
 #include "game.h"
 #include "scene/game_scene.h"
 
@@ -46,10 +47,9 @@ Game::~Game() {
 
 void Game::Run() {
 
-  GameScene game_scene = GameScene(renderer_, window_, global_quit_,
-                                   (int) screen_height_, (int) screen_width_);
-  game_scene.LoadWordsViaFile("assets/txt/test-pairs-longer.csv");
-  game_scene.Run();
+  StartScene start_scene = StartScene(renderer_, window_, global_quit_,
+                                      (int) screen_height_, (int) screen_width_);
+  start_scene.Run();
 
 }
 
