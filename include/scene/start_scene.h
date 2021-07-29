@@ -26,17 +26,25 @@ class StartScene : public Scene {
   const int title_font_size_ = 44;
   SDL_Color title_text_color_ = {0, 0, 0};
 
+  TTF_Font *button_font_ = nullptr;
+  const int button_font_size_ = 28;
+
   Text *start_text_ = nullptr;
-  TTF_Font *start_font_ = nullptr;
   SDL_Color start_text_color_ = {0, 0, 0};
   Button *start_button_ = nullptr;
   ButtonEvent start_button_event_ = NONE;
-  const int start_button_width_ = 400;
-  const int start_button_height_ = 100;
-  const int start_font_size_ = 28;
+  const int start_button_width_ = 300;
+  const int start_button_height_ = 50;
 
-  const double screen_height_;
-  const double screen_width_;
+  Text *help_text_ = nullptr;
+  SDL_Color help_text_color_ = {0, 0, 0};
+  Button *help_button_ = nullptr;
+  ButtonEvent help_button_event_ = NONE;
+  const int help_button_width_ = 300;
+  const int help_button_height_ = 50;
+
+  const int screen_height_;
+  const int screen_width_;
 
 };
 

@@ -9,7 +9,7 @@ namespace cross_language_match {
 
 class Text {
  public:
-  Text(SDL_Renderer *renderer, TTF_Font *font, SDL_Color color, std::string text);
+  Text(SDL_Renderer *renderer, TTF_Font *font, SDL_Color color, std::string text, int wrap_length_pixels = -1);
   ~Text();
   void Free();
   void Render(int x, int y);

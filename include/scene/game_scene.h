@@ -57,8 +57,8 @@ class GameScene : public Scene {
   bool current_round_is_complete_ = false;
   bool last_submission_was_incorrect_ = false;
 
-  const double screen_height_;
-  const double screen_width_;
+  const int screen_height_;
+  const int screen_width_;
   const double screen_height_percentage_reserved_for_words_ = 0.6;
   const int padding_word_columns_ = 100;
   const int font_size_ = 28;

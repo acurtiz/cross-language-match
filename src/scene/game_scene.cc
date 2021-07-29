@@ -10,8 +10,8 @@ namespace cross_language_match {
 
 GameScene::GameScene(SDL_Renderer *renderer, SDL_Window *window, bool &global_quit, int screen_height, int screen_width)
     : Scene(renderer, window, global_quit),
-      screen_height_((double) screen_height),
-      screen_width_((double) screen_width) {
+      screen_height_(screen_height),
+      screen_width_(screen_width) {
 
   SDL_SetRenderDrawColor(renderer_, 0x00, 0x00, 0x00, 0xFF);
 

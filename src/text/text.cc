@@ -5,12 +5,17 @@
 
 namespace cross_language_match {
 
-Text::Text(SDL_Renderer *renderer, TTF_Font *font, SDL_Color color, std::string text) {
+Text::Text(SDL_Renderer *renderer, TTF_Font *font, SDL_Color color, std::string text, int wrap_length_pixels) {
 
   renderer_ = renderer;
   text_string_ = text;
 
-  SDL_Surface *text_surface = TTF_RenderUTF8_Blended(font, text.c_str(), color);
+  SDL_Surface *text_surface;
+  if (wrap_length_pixels == -1) {
+    text_surface = TTF_RenderUTF8_Blended(font, text.c_str(), color);
+  } else {
+    text_surface = TTF_RenderUTF8_Blended_Wrapped(font, text.c_str(), color, wrap_length_pixels);
+  }
   if (text_surface == nullptr) {
     throw std::runtime_error(
         boost::str(boost::format("Unable to render text surface, error: %1\n") % TTF_GetError())

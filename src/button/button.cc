@@ -8,9 +8,7 @@ Button::Button(SDL_Renderer *renderer, int width, int height) {
   height_ = height;
 }
 
-Button::~Button() {
-  return;
-}
+Button::~Button() = default;
 
 ButtonEvent Button::HandleEvent(SDL_Event *event) {
 
@@ -18,7 +16,7 @@ ButtonEvent Button::HandleEvent(SDL_Event *event) {
     return NONE;
   }
 
-  int mouse_x, mouse_y;
+  int mouse_x, mouse_y = 0;
   SDL_GetMouseState(&mouse_x, &mouse_y);
 
   bool mouse_inside_button = (mouse_x >= top_left_x_)
@@ -45,6 +43,9 @@ ButtonEvent Button::HandleEvent(SDL_Event *event) {
         return NONE;
     }
   }
+
+  return NONE;
+
 }
 
 void Button::Render() {
