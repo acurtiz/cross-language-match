@@ -10,9 +10,13 @@ namespace cross_language_match {
 class FileWordLoader : public WordLoader {
  public:
   FileWordLoader(std::string file_path);
-  std::map<std::string, std::string> *GetWordPairs() override;
+  ~FileWordLoader();
+ protected:
+  std::istream &OpenInputStream() override;
+  void CloseInputStream() override;
  private:
   std::string file_path_;
+  std::ifstream *file_stream_;
 };
 
 }

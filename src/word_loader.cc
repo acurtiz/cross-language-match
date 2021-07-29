@@ -5,12 +5,14 @@
 
 namespace cross_language_match {
 
-void WordLoader::ExtractLineFromStreamIntoMap(std::istream *input_stream,
-                                              std::map<std::string, std::string> *destination_map) {
+std::map<std::string, std::string> *WordLoader::GetWordPairs() {
+
+  std::map<std::string, std::string> *word_pairs = new std::map<std::string, std::string>();
+
+  std::istream &input_stream = OpenInputStream();
 
   std::string line;
-
-  while (getline(*input_stream, line)) {
+  while (getline(input_stream, line)) {
     std::size_t comma_occurrences = std::count(line.begin(), line.end(), ',');
     if (comma_occurrences != 1) {
       throw std::runtime_error(
@@ -29,9 +31,13 @@ void WordLoader::ExtractLineFromStreamIntoMap(std::istream *input_stream,
     std::string left_word = line.substr(0, comma_index);
     std::string right_word = line.substr(comma_index + 1);
 
-    destination_map->insert(std::pair<std::string, std::string>(left_word, right_word));
+    word_pairs->insert(std::pair<std::string, std::string>(left_word, right_word));
 
   }
+
+  CloseInputStream();
+
+  return word_pairs;
 
 }
 

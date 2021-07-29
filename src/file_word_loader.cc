@@ -10,24 +10,30 @@ namespace cross_language_match {
 
 FileWordLoader::FileWordLoader(std::string file_path) {
   file_path_ = file_path;
+  file_stream_ = nullptr;
 }
 
-std::map<std::string, std::string> *FileWordLoader::GetWordPairs() {
+FileWordLoader::~FileWordLoader() {
+  CloseInputStream();
+}
 
-  std::map<std::string, std::string> *word_pairs = new std::map<std::string, std::string>();
+std::istream &FileWordLoader::OpenInputStream() {
 
-  std::string line;
-  std::ifstream file(file_path_);
-  if (!file.is_open()) {
+  file_stream_ = new std::ifstream(file_path_);
+  if (!file_stream_->is_open()) {
     throw std::runtime_error(boost::str(boost::format("Unable to open file %1") % file_path_));
   }
 
-  ExtractLineFromStreamIntoMap(&file, word_pairs);
+  return *file_stream_;
 
-  file.close();
+}
 
-  return word_pairs;
-
+void FileWordLoader::CloseInputStream() {
+  if (file_stream_ != nullptr) {
+    file_stream_->close();
+  }
+  delete file_stream_;
+  file_stream_ = nullptr;
 }
 
 }
