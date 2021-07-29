@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 #include <map>
-#include "interactive_text.h"
+#include "text/interactive_text.h"
 
 #ifndef CROSSLANGUAGEMATCH_SRC_GAME_H_
 #define CROSSLANGUAGEMATCH_SRC_GAME_H_

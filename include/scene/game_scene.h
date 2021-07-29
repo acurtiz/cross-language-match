@@ -3,7 +3,7 @@
 #include <SDL2_ttf/SDL_ttf.h>
 #include <button/button.h>
 #include "scene.h"
-#include "interactive_text.h"
+#include "text/interactive_text.h"
 
 #ifndef CROSSLANGUAGEMATCH_SRC_GAME_SCENE_H_
 #define CROSSLANGUAGEMATCH_SRC_GAME_SCENE_H_
@@ -25,9 +25,13 @@ class GameScene : public Scene {
   void LoadWordsViaString(std::string raw_string);
 
  private:
-
   void PrepareCurrentWords();
   void CleanCurrentWords();
+  bool AreAllWordsLinkedAndCorrect(std::vector<InteractiveText *> *all_words,
+                                   std::map<std::string, std::string> *expected_word_pairs);
+  void Shuffle(std::vector<InteractiveText *> *vector);
+  std::vector<InteractiveText *> *GetUnifiedVector(std::vector<InteractiveText *> *a,
+                                                   std::vector<InteractiveText *> *b);
 
   TTF_Font *font_ = nullptr;
   SDL_Color text_color_ = {0, 0, 0};

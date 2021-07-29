@@ -1,5 +1,5 @@
 #include <vector>
-#include "interactive_text.h"
+#include "text/interactive_text.h"
 
 namespace cross_language_match {
 

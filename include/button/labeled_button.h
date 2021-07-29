@@ -1,5 +1,5 @@
 #include "button.h"
-#include "text.h"
+#include "text/text.h"
 
 #ifndef CROSSLANGUAGEMATCH_SRC_LABELED_BUTTON_H_
 #define CROSSLANGUAGEMATCH_SRC_LABELED_BUTTON_H_

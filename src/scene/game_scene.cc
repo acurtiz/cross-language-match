@@ -1,7 +1,7 @@
+#include <random>
 #include "scene/game_scene.h"
 #include "word_loader/string_word_loader.h"
 #include "word_loader/file_word_loader.h"
-#include "game_utility.h"
 #include "button/button.h"
 #include "button/labeled_button.h"
 #include "boost/format.hpp"
@@ -33,6 +33,10 @@ GameScene::~GameScene() = default;
 
 void GameScene::RunSingleIterationEventHandler(SDL_Event &event) {
 
+  if (event.type == SDL_QUIT) {
+    QuitGlobal();
+  }
+
   for (auto &word : *left_and_right_words_) {
     word->HandleEvent(&event, *left_and_right_words_);
   }
@@ -40,7 +44,7 @@ void GameScene::RunSingleIterationEventHandler(SDL_Event &event) {
   submit_button_event_ = submit_button_->HandleEvent(&event);
 
   if (submit_button_event_ == PRESSED) {
-    if (GameUtility::AreAllWordsLinkedAndCorrect(left_and_right_words_, current_word_pairs_)) {
+    if (AreAllWordsLinkedAndCorrect(left_and_right_words_, current_word_pairs_)) {
       printf("Correct! Preparing next set of words!\n");
       last_submission_was_incorrect_ = false;
       current_round_is_complete_ = true;
@@ -217,10 +221,10 @@ void GameScene::PrepareCurrentWords() {
   }
 
   // Shuffle so the words are not displayed at equal levels in the GUI
-  GameUtility::Shuffle(left_words_);
-  GameUtility::Shuffle(right_words_);
+  Shuffle(left_words_);
+  Shuffle(right_words_);
 
-  left_and_right_words_ = GameUtility::GetUnifiedVector(left_words_, right_words_);
+  left_and_right_words_ = GetUnifiedVector(left_words_, right_words_);
 
 }
 
@@ -253,6 +257,63 @@ void GameScene::CleanCurrentWords() {
   delete left_and_right_words_;
 
   delete current_word_pairs_;
+
+}
+
+void GameScene::Shuffle(std::vector<InteractiveText *> *vector) {
+
+  std::shuffle(vector->begin(),
+               vector->end(),
+               std::default_random_engine(std::chrono::system_clock::now().time_since_epoch().count())
+  );
+
+}
+
+std::vector<InteractiveText *> *GameScene::GetUnifiedVector(std::vector<InteractiveText *> *a,
+                                                            std::vector<InteractiveText *> *b) {
+
+  std::vector<InteractiveText *> *all_words = new std::vector<InteractiveText *>();
+  all_words->insert(all_words->end(), a->begin(), a->end());
+  all_words->insert(all_words->end(), b->begin(), b->end());
+  return all_words;
+
+}
+
+bool GameScene::AreAllWordsLinkedAndCorrect(std::vector<InteractiveText *> *all_words,
+                                            std::map<std::string, std::string> *expected_word_pairs) {
+
+  // Ensure all words have been paired up
+  for (auto &word : *all_words) {
+    if (word->GetLink() == nullptr) {
+      printf("Word (%s) is not paired up; all words must be paired up for submission to occur.\n",
+             word->GetText()->GetString().c_str());
+      return false;
+    }
+  }
+
+  for (auto &word : *all_words) {
+
+    // Only need to inspect left words since they've been shown to be paired to all right words already
+    if (word->GetGroup() != LEFT) {
+      continue;
+    }
+
+    std::string left_word_str = word->GetText()->GetString();
+    std::string actual_linked_right_word = word->GetLink()->GetText()->GetString();
+    std::string expected_linked_right_word = (*expected_word_pairs)[left_word_str];
+
+    if (actual_linked_right_word != expected_linked_right_word) {
+      printf(
+          "Left word (%s) is linked to right word (%s) but this is incorrect; expected it to be linked to (%s)\n",
+          left_word_str.c_str(),
+          actual_linked_right_word.c_str(),
+          expected_linked_right_word.c_str());
+      return false;
+    }
+
+  }
+
+  return true;
 
 }
 
