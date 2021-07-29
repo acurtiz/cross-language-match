@@ -8,8 +8,7 @@
 namespace cross_language_match {
 
 class GameUtility {
- private:
-  friend class Game;
+ public:
   static bool AreAllWordsLinkedAndCorrect(std::vector<InteractiveText *> *all_words,
                                           std::map<std::string, std::string> *expected_word_pairs);
   static void Shuffle(std::vector<InteractiveText *> *vector);
