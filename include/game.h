@@ -44,6 +44,9 @@ class Game {
   const int submit_button_width_ = 100;
   const int submit_button_height_ = 50;
 
+  const int next_button_width_ = 100;
+  const int next_button_height_ = 50;
+
   // Words to be presented per round should be a function of the screen height
   const int words_to_present_per_round_ = (int) (screen_height_ * screen_height_percentage_reserved_for_words_)
       / (font_size_ + InteractiveText::GetPaddingPerSide() * 2 + padding_individual_words_);

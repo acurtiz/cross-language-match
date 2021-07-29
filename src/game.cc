@@ -173,10 +173,15 @@ void Game::LoopDrawUntilQuit() {
   PrepareCurrentWords();
 
   Button *submit_button = new Button(renderer_, submit_button_width_, submit_button_height_);
+  Button *next_round_button = new Button(renderer_, next_button_width_, next_button_height_);
+
   ButtonEvent submit_button_event = NONE;
+  ButtonEvent next_round_button_event = NONE;
 
   SDL_Event e;
   bool quit = false;
+  bool all_rounds_complete = false;
+  bool current_round_is_complete = false;
 
   while (!quit) {
 
@@ -193,21 +198,27 @@ void Game::LoopDrawUntilQuit() {
       submit_button_event = submit_button->HandleEvent(&e);
 
       if (submit_button_event == PRESSED) {
-
         if (GameHelper::AreAllWordsLinkedAndCorrect(left_and_right_words_, current_word_pairs_)) {
-
           if (remaining_word_pairs_->empty()) {
             printf("Correct! Game is over! All words done!\n");
-            quit = true;
+            all_rounds_complete = true;
           } else {
             printf("Correct! Preparing next set of words!\n");
-            PrepareCurrentWords();
+            current_round_is_complete = true;
           }
-
         } else {
           printf("Incorrect; try again!\n");
         }
+      }
 
+      next_round_button_event = next_round_button->HandleEvent(&e);
+      if (next_round_button_event == PRESSED) {
+        if (all_rounds_complete) {
+          quit = true;
+        } else {
+          PrepareCurrentWords();
+          current_round_is_complete = false;
+        }
       }
 
     }
@@ -233,6 +244,11 @@ void Game::LoopDrawUntilQuit() {
 
     submit_button->SetTopLeftPosition(padding_individual_words_, screen_height_ * 0.9);
     submit_button->Render();
+
+    if (current_round_is_complete || all_rounds_complete) {
+      next_round_button->SetTopLeftPosition(300, screen_height_ * 0.9);
+      next_round_button->Render();
+    }
 
     SDL_RenderPresent(renderer_);
 
