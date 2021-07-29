@@ -15,7 +15,8 @@ class Game {
  public:
   Game();
   ~Game();
-  void LoadWordPairs(std::string file_path);
+  void LoadWordsViaFile(std::string file_path);
+  void LoadWordsViaString(std::string raw_string);
   void LoopDrawUntilQuit();
 
  private:

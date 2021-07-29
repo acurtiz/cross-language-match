@@ -1,14 +1,18 @@
 #include <map>
 #include <string>
+#include "word_loader.h"
 
 #ifndef CROSSLANGUAGEMATCH_SRC_FILE_LOADER_H_
 #define CROSSLANGUAGEMATCH_SRC_FILE_LOADER_H_
 
 namespace cross_language_match {
 
-class WordPairFileLoader {
+class FileWordLoader : public WordLoader {
  public:
-  static std::map<std::string, std::string> *GetWordPairs(std::string file_path);
+  FileWordLoader(std::string file_path);
+  std::map<std::string, std::string> *GetWordPairs() override;
+ private:
+  std::string file_path_;
 };
 
 }

@@ -4,7 +4,8 @@
 #include "game_helper.h"
 #include "button.h"
 #include "interactive_text.h"
-#include "word_pair_file_loader.h"
+#include "file_word_loader.h"
+#include "string_word_loader.h"
 
 namespace cross_language_match {
 
@@ -66,15 +67,29 @@ Game::~Game() {
   delete remaining_word_pairs_;
 }
 
-void Game::LoadWordPairs(std::string file_path) {
+void Game::LoadWordsViaString(std::string raw_string) {
 
   if (remaining_word_pairs_ != nullptr) {
-    printf("LoadWordPairs has already been invoked; this is thus a no-op. Use a new Game object in order to load a"
+    printf("LoadWordsViaFile has already been invoked; this is thus a no-op. Use a new Game object in order to load a"
            " different word set");
     return;
   }
 
-  remaining_word_pairs_ = WordPairFileLoader::GetWordPairs(file_path);
+  StringWordLoader word_loader = StringWordLoader(raw_string);
+  remaining_word_pairs_ = word_loader.GetWordPairs();
+
+}
+
+void Game::LoadWordsViaFile(std::string file_path) {
+
+  if (remaining_word_pairs_ != nullptr) {
+    printf("LoadWordsViaFile has already been invoked; this is thus a no-op. Use a new Game object in order to load a"
+           " different word set");
+    return;
+  }
+
+  FileWordLoader word_pair_file_loader = FileWordLoader(file_path);
+  remaining_word_pairs_ = word_pair_file_loader.GetWordPairs();
 
 }
 
@@ -140,8 +155,8 @@ void Game::CleanCurrentWords() {
   }
 
   // left_and_right_words_ is either:
-  //   nullptr already (if LoadWordPairs was invoked)
-  //   OR it holds all of the pointers already contained in left_words_ and right_words_ (if LoadWordPairs was invoked)
+  //   nullptr already (if LoadWordsViaFile was invoked)
+  //   OR it holds all of the pointers already contained in left_words_ and right_words_ (if LoadWordsViaFile was invoked)
   // In neither case do we want to invoke delete on the contents of it; hence, we just delete the container
   delete left_and_right_words_;
 
