@@ -16,13 +16,14 @@ class Button {
   ~Button();
   ButtonEvent HandleEvent(SDL_Event *event);
   void SetTopLeftPosition(int x, int y);
-  void Render();
- private:
-  SDL_Renderer *renderer_;
+  virtual void Render();
+ protected:
   int top_left_x_;
   int top_left_y_;
   int width_;
   int height_;
+ private:
+  SDL_Renderer *renderer_;
   const SDL_Color initial_color_ = {0xAA, 0xAA, 0xD6, 0xFF};
   SDL_Color current_color_ = initial_color_;
 

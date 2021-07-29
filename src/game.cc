@@ -3,6 +3,7 @@
 #include "game.h"
 #include "game_helper.h"
 #include "button.h"
+#include "labeled_button.h"
 #include "interactive_text.h"
 #include "word_loader/file_word_loader.h"
 #include "word_loader/string_word_loader.h"
@@ -172,8 +173,13 @@ void Game::LoopDrawUntilQuit() {
 
   PrepareCurrentWords();
 
-  Button *submit_button = new Button(renderer_, submit_button_width_, submit_button_height_);
-  Button *next_round_button = new Button(renderer_, next_button_width_, next_button_height_);
+  Text *incorrect_text = new Text(renderer_, font_, text_color_, "Incorrect; please try again.");
+  Text *correct_text = new Text(renderer_, font_, text_color_, "Correct - well done!");
+
+  Text *submit_text = new Text(renderer_, font_, text_color_, "Submit");
+  Button *submit_button = new LabeledButton(renderer_, submit_button_width_, submit_button_height_, submit_text);
+  Text *next_round_text = new Text(renderer_, font_, text_color_, "Next Round");
+  Button *next_round_button = new LabeledButton(renderer_, next_button_width_, next_button_height_, next_round_text);
 
   ButtonEvent submit_button_event = NONE;
   ButtonEvent next_round_button_event = NONE;
@@ -182,6 +188,7 @@ void Game::LoopDrawUntilQuit() {
   bool quit = false;
   bool all_rounds_complete = false;
   bool current_round_is_complete = false;
+  bool last_submission_was_incorrect = false;
 
   while (!quit) {
 
@@ -199,16 +206,21 @@ void Game::LoopDrawUntilQuit() {
 
       if (submit_button_event == PRESSED) {
         if (GameHelper::AreAllWordsLinkedAndCorrect(left_and_right_words_, current_word_pairs_)) {
-          if (remaining_word_pairs_->empty()) {
-            printf("Correct! Game is over! All words done!\n");
-            all_rounds_complete = true;
-          } else {
-            printf("Correct! Preparing next set of words!\n");
-            current_round_is_complete = true;
-          }
+          printf("Correct! Preparing next set of words!\n");
+          last_submission_was_incorrect = false;
+          current_round_is_complete = true;
         } else {
+          last_submission_was_incorrect = true;
+          // In case the submit button is pressed *after* the set has been matched correctly, the user has undid the
+          // completion
+          current_round_is_complete = false;
           printf("Incorrect; try again!\n");
         }
+      }
+
+      if (current_round_is_complete && remaining_word_pairs_->empty()) {
+        printf("Correct! Game is over! All words done!\n");
+        all_rounds_complete = true;
       }
 
       next_round_button_event = next_round_button->HandleEvent(&e);
@@ -242,12 +254,24 @@ void Game::LoopDrawUntilQuit() {
       y += right_word->GetHeight() + padding_individual_words_;
     }
 
-    submit_button->SetTopLeftPosition(padding_individual_words_, screen_height_ * 0.9);
+    // Render submit button in bottom left
+    submit_button->SetTopLeftPosition(10,
+                                      screen_height_ - submit_button_height_ - 10);
     submit_button->Render();
 
-    if (current_round_is_complete || all_rounds_complete) {
-      next_round_button->SetTopLeftPosition(300, screen_height_ * 0.9);
+    // Render next round button in bottom right, as well as a congratulations message in the middle
+    if (current_round_is_complete) {
+      next_round_button->SetTopLeftPosition(screen_width_ - 10 - next_button_width_,
+                                            screen_height_ - next_button_height_ - 10);
       next_round_button->Render();
+      correct_text->Render(screen_width_ / 2 - correct_text->GetWidth() / 2,
+                           screen_height_ - correct_text->GetHeight() - 10);
+    }
+
+    // Render incorrect message
+    if (last_submission_was_incorrect) {
+      incorrect_text->Render(screen_width_ / 2 - incorrect_text->GetWidth() / 2,
+                             screen_height_ - incorrect_text->GetHeight() - 10);
     }
 
     SDL_RenderPresent(renderer_);

@@ -41,11 +41,11 @@ class Game {
   const int padding_word_columns_ = 100;
   const int font_size_ = 28;
   const int padding_individual_words_ = 15;
-  const int submit_button_width_ = 100;
-  const int submit_button_height_ = 50;
+  const int submit_button_width_ = 200;
+  const int submit_button_height_ = 100;
 
-  const int next_button_width_ = 100;
-  const int next_button_height_ = 50;
+  const int next_button_width_ = 200;
+  const int next_button_height_ = 100;
 
   // Words to be presented per round should be a function of the screen height
   const int words_to_present_per_round_ = (int) (screen_height_ * screen_height_percentage_reserved_for_words_)

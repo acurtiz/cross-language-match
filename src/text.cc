@@ -45,8 +45,7 @@ void Text::Free() {
 
 }
 
-void Text::Render(int x,
-                  int y) {
+void Text::Render(int x, int y) {
 
   SDL_Rect dest_rect = {x, y, width_, height_};
   SDL_RenderCopy(renderer_, texture_, nullptr, &dest_rect);
