@@ -26,8 +26,8 @@ LoadScene::LoadScene(SDL_Renderer *renderer,
     );
   }
 
-  load_button_font_ = TTF_OpenFont("assets/fonts/OpenSans-Regular.ttf", load_button_font_size_);
-  if (load_button_font_ == nullptr) {
+  button_font_ = TTF_OpenFont("assets/fonts/OpenSans-Regular.ttf", load_button_font_size_);
+  if (button_font_ == nullptr) {
     throw std::runtime_error(boost::str(boost::format("Failed to load font, error: %1%\n") % TTF_GetError()));
   }
 
@@ -40,8 +40,8 @@ LoadScene::LoadScene(SDL_Renderer *renderer,
 
 LoadScene::~LoadScene() {
 
-  TTF_CloseFont(load_button_font_);
-  load_button_font_ = nullptr;
+  TTF_CloseFont(button_font_);
+  button_font_ = nullptr;
 
   TTF_CloseFont(small_font_);
   small_font_ = nullptr;
@@ -56,9 +56,13 @@ void LoadScene::RunPreLoop() {
   SDL_RenderClear(renderer_);
   SDL_RenderPresent(renderer_);
 
-  load_text_ = new Text(renderer_, load_button_font_, load_button_text_color_, "Load");
+  load_text_ = new Text(renderer_, button_font_, button_text_color_, "Load");
   load_button_ = new LabeledButton(renderer_, load_button_width_, load_button_height_, load_text_);
   load_button_event_ = NONE;
+
+  return_button_text_ = new Text(renderer_, button_font_, button_text_color_, "Main Menu");
+  return_button_ = new LabeledButton(renderer_, return_button_width_, return_button_height_, return_button_text_);
+  return_button_event_ = NONE;
 
   explanation_text_ = new Text(renderer_,
                                small_font_,
@@ -77,6 +81,9 @@ void LoadScene::RunPostLoop() {
   delete load_text_;
   load_text_ = nullptr;
 
+  delete load_button_;
+  load_button_ = nullptr;
+
   load_button_event_ = NONE;
 
   delete explanation_text_;
@@ -84,6 +91,12 @@ void LoadScene::RunPostLoop() {
 
   delete error_text_;
   error_text_ = nullptr;
+
+  delete return_button_text_;
+  return_button_text_ = nullptr;
+
+  delete return_button_;
+  return_button_ = nullptr;
 
   SDL_StopTextInput();
 
@@ -95,6 +108,7 @@ void LoadScene::RunSingleIterationEventHandler(SDL_Event &event) {
     QuitGlobal();
   }
 
+  return_button_event_ = return_button_->HandleEvent(&event);
   load_button_event_ = load_button_->HandleEvent(&event);
 
   if (event.type == SDL_KEYDOWN) {
@@ -136,6 +150,10 @@ void LoadScene::RunSingleIterationEventHandler(SDL_Event &event) {
     reload_input_text_ = false;
   }
 
+  if (return_button_event_ == PRESSED) {
+    QuitLocal();
+  }
+
   if (load_button_event_ == PRESSED) {
 
     FileWordLoader word_loader = FileWordLoader(inputted_text_);
@@ -169,7 +187,6 @@ void LoadScene::RunSingleIterationEventHandler(SDL_Event &event) {
 
     }
 
-    printf("1");
     if (error_text_ == nullptr) {
 
       GameScene game_scene = GameScene(renderer_, window_, global_quit_, screen_height_, screen_width_,
@@ -195,6 +212,11 @@ void LoadScene::RunSingleIterationLoopBody() {
   load_button_->SetTopLeftPosition(screen_width_ / 2 - load_button_width_ / 2,
                                    screen_height_ - load_button_height_ - 300);
   load_button_->Render();
+
+  // Render return button in bottom right
+  return_button_->SetTopLeftPosition(screen_width_ - 10 - return_button_width_,
+                                     screen_height_ - return_button_height_ - 10);
+  return_button_->Render();
 
   // Render the explanation in the top middle
   explanation_text_->Render(screen_width_ / 2 - explanation_text_->GetWidth() / 2,

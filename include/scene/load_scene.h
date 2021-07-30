@@ -29,13 +29,20 @@ class LoadScene : public Scene {
   SDL_Color small_font_color_ = {0, 0, 0};
 
   Text *load_text_ = nullptr;
-  TTF_Font *load_button_font_ = nullptr;
-  SDL_Color load_button_text_color_ = {0, 0, 0};
   Button *load_button_ = nullptr;
   ButtonEvent load_button_event_ = NONE;
+
+  Text *return_button_text_ = nullptr;
+  Button *return_button_ = nullptr;
+  ButtonEvent return_button_event_ = NONE;
+
+  TTF_Font *button_font_ = nullptr;
+  SDL_Color button_text_color_ = {0, 0, 0};
   const int load_button_width_ = 400;
   const int load_button_height_ = 100;
   const int load_button_font_size_ = 28;
+  const int return_button_width_ = 200;
+  const int return_button_height_ = 100;
 
   const int screen_height_;
   const int screen_width_;
