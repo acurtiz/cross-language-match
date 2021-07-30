@@ -13,16 +13,18 @@ namespace cross_language_match {
 class GameScene : public Scene {
 
  public:
-  GameScene(SDL_Renderer *renderer, SDL_Window *window, bool &global_quit, int screen_height, int screen_width);
+  GameScene(SDL_Renderer *renderer,
+            SDL_Window *window,
+            bool &global_quit,
+            int screen_height,
+            int screen_width,
+            std::map<std::string, std::string> word_pairs);
   ~GameScene();
 
   void RunPreLoop() override;
   void RunPostLoop() override;
   void RunSingleIterationEventHandler(SDL_Event &event) override;
   void RunSingleIterationLoopBody() override;
-
-  void LoadWordsViaFile(std::string file_path);
-  void LoadWordsViaString(std::string raw_string);
 
  private:
   void PrepareCurrentWords();

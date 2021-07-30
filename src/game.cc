@@ -10,7 +10,7 @@ Game::Game() {
 
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
     throw std::runtime_error(
-        boost::str(boost::format("SDL could not initialize, error: %1\n") % SDL_GetError())
+        boost::str(boost::format("SDL could not initialize, error: %1%\n") % SDL_GetError())
     );
   }
 
@@ -23,7 +23,7 @@ Game::Game() {
 
   if (window_ == nullptr) {
     throw std::runtime_error(
-        boost::str(boost::format("Window could not be created, error: %1\n") % SDL_GetError())
+        boost::str(boost::format("Window could not be created, error: %1%\n") % SDL_GetError())
     );
   }
 
@@ -31,7 +31,7 @@ Game::Game() {
 
   if (renderer_ == nullptr) {
     throw std::runtime_error(
-        boost::str(boost::format("Renderer could not be created, error: %1\n") % SDL_GetError())
+        boost::str(boost::format("Renderer could not be created, error: %1%\n") % SDL_GetError())
     );
   }
 

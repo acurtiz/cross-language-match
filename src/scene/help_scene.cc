@@ -17,18 +17,18 @@ HelpScene::HelpScene(SDL_Renderer *renderer,
 
   if (TTF_Init() == -1) {
     throw std::runtime_error(
-        boost::str(boost::format("SDL_ttf could not be initialized, error: %1\n") % TTF_GetError())
+        boost::str(boost::format("SDL_ttf could not be initialized, error: %1%\n") % TTF_GetError())
     );
   }
 
   return_button_font_ = TTF_OpenFont("assets/fonts/OpenSans-Regular.ttf", return_button_font_size_);
   if (return_button_font_ == nullptr) {
-    throw std::runtime_error(boost::str(boost::format("Failed to load font, error: %1\n") % TTF_GetError()));
+    throw std::runtime_error(boost::str(boost::format("Failed to load font, error: %1%\n") % TTF_GetError()));
   }
 
   explanation_font_ = TTF_OpenFont("assets/fonts/OpenSans-Regular.ttf", explanation_font_size_);
   if (explanation_font_ == nullptr) {
-    throw std::runtime_error(boost::str(boost::format("Failed to load font, error: %1\n") % TTF_GetError()));
+    throw std::runtime_error(boost::str(boost::format("Failed to load font, error: %1%\n") % TTF_GetError()));
   }
 
 }

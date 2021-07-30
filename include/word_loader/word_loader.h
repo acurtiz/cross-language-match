@@ -7,11 +7,24 @@
 namespace cross_language_match {
 
 class WordLoader {
+
  public:
-  std::map<std::string, std::string> *GetWordPairs();
+  enum InputError {
+    NONE,
+    LINE_CONTAINS_MORE_THAN_ONE_COMMA,
+    LINE_CONTAINS_NO_COMMA,
+    FILE_NOT_FOUND
+  };
+  virtual InputError ParseAndLoadIntoMap();
+  std::map<std::string, std::string> GetWordPairMap();
+
  protected:
   virtual std::istream &OpenInputStream() = 0;
   virtual void CloseInputStream() = 0;
+
+ private:
+  std::map<std::string, std::string> word_pairs_;
+
 };
 
 }

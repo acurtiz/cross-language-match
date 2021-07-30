@@ -8,7 +8,12 @@
 
 namespace cross_language_match {
 
-GameScene::GameScene(SDL_Renderer *renderer, SDL_Window *window, bool &global_quit, int screen_height, int screen_width)
+GameScene::GameScene(SDL_Renderer *renderer,
+                     SDL_Window *window,
+                     bool &global_quit,
+                     int screen_height,
+                     int screen_width,
+                     std::map<std::string, std::string> word_pairs)
     : Scene(renderer, window, global_quit),
       screen_height_(screen_height),
       screen_width_(screen_width) {
@@ -17,15 +22,17 @@ GameScene::GameScene(SDL_Renderer *renderer, SDL_Window *window, bool &global_qu
 
   if (TTF_Init() == -1) {
     throw std::runtime_error(
-        boost::str(boost::format("SDL_ttf could not be initialized, error: %1\n") % TTF_GetError())
+        boost::str(boost::format("SDL_ttf could not be initialized, error: %1%\n") % TTF_GetError())
     );
   }
 
   font_ = TTF_OpenFont("assets/fonts/OpenSans-Regular.ttf", font_size_);
 
   if (font_ == NULL) {
-    throw std::runtime_error(boost::str(boost::format("Failed to load font, error: %1\n") % TTF_GetError()));
+    throw std::runtime_error(boost::str(boost::format("Failed to load font, error: %1%\n") % TTF_GetError()));
   }
+
+  remaining_word_pairs_ = new std::map<std::string, std::string>(word_pairs);
 
 }
 
@@ -34,6 +41,11 @@ GameScene::~GameScene() {
   TTF_CloseFont(font_);
   font_ = nullptr;
   TTF_Quit();
+
+  delete remaining_word_pairs_;
+
+  RunPostLoop();
+  CleanCurrentWords();
 
 }
 
@@ -169,32 +181,6 @@ void GameScene::RunSingleIterationLoopBody() {
 
 }
 
-void GameScene::LoadWordsViaString(std::string raw_string) {
-
-  if (remaining_word_pairs_ != nullptr) {
-    printf("LoadWordsViaFile has already been invoked; this is thus a no-op. Use a new Game object in order to load a"
-           " different word set");
-    return;
-  }
-
-  StringWordLoader word_loader = StringWordLoader(raw_string);
-  remaining_word_pairs_ = word_loader.GetWordPairs();
-
-}
-
-void GameScene::LoadWordsViaFile(std::string file_path) {
-
-  if (remaining_word_pairs_ != nullptr) {
-    printf("LoadWordsViaFile has already been invoked; this is thus a no-op. Use a new Game object in order to load a"
-           " different word set");
-    return;
-  }
-
-  FileWordLoader word_pair_file_loader = FileWordLoader(file_path);
-  remaining_word_pairs_ = word_pair_file_loader.GetWordPairs();
-
-}
-
 void GameScene::PrepareCurrentWords() {
 
   CleanCurrentWords();
@@ -244,6 +230,7 @@ void GameScene::CleanCurrentWords() {
       delete word;
     }
     delete left_words_;
+    left_words_ = nullptr;
   }
 
   if (right_words_ != nullptr) {
@@ -254,15 +241,18 @@ void GameScene::CleanCurrentWords() {
       delete word;
     }
     delete right_words_;
+    right_words_ = nullptr;
   }
 
   // left_and_right_words_ is either:
-  //   nullptr already (if LoadWordsViaFile was invoked)
+  //   nullptr already
   //   OR it holds all of the pointers already contained in left_words_ and right_words_ (if LoadWordsViaFile was invoked)
   // In neither case do we want to invoke delete on the contents of it; hence, we just delete the container
   delete left_and_right_words_;
+  left_and_right_words_ = nullptr;
 
   delete current_word_pairs_;
+  current_word_pairs_ = nullptr;
 
 }
 

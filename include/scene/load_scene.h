@@ -21,10 +21,12 @@ class LoadScene : public Scene {
 
  private:
 
-  TTF_Font *explanation_font_ = nullptr;
   Text *explanation_text_ = nullptr;
-  const int explanation_font_size_ = 22;
-  SDL_Color explanation_text_color_ = {0, 0, 0};
+  Text *error_text_ = nullptr;
+
+  TTF_Font *small_font_ = nullptr;
+  const int small_font_size_ = 22;
+  SDL_Color small_font_color_ = {0, 0, 0};
 
   Text *load_text_ = nullptr;
   TTF_Font *load_button_font_ = nullptr;
@@ -39,7 +41,9 @@ class LoadScene : public Scene {
   const int screen_width_;
 
   bool reload_input_text_ = true;
-  std::string inputted_text_ = "dog,cat\nsky,ground\n";
+  std::string inputted_text_ = "/Users/alex/CLionProjects/CrossLanguageMatch/assets/txt/test-pairs.csv";
+  // TODO replace with more generic string
+  // std::string inputted_text_ = "/Users/person/Documents/language-practice.csv";
   Text *input_text_ = nullptr;
 
 };

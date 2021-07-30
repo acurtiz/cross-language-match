@@ -11,6 +11,7 @@ class FileWordLoader : public WordLoader {
  public:
   FileWordLoader(std::string file_path);
   ~FileWordLoader();
+  WordLoader::InputError ParseAndLoadIntoMap() override;
  protected:
   std::istream &OpenInputStream() override;
   void CloseInputStream() override;

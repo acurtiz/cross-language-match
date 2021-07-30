@@ -5,7 +5,7 @@
 #include "button/labeled_button.h"
 #include "button/button.h"
 #include "scene/game_scene.h"
-#include "word_loader/string_word_loader.h"
+#include "word_loader/file_word_loader.h"
 
 namespace cross_language_match {
 
@@ -22,18 +22,18 @@ LoadScene::LoadScene(SDL_Renderer *renderer,
 
   if (TTF_Init() == -1) {
     throw std::runtime_error(
-        boost::str(boost::format("SDL_ttf could not be initialized, error: %1\n") % TTF_GetError())
+        boost::str(boost::format("SDL_ttf could not be initialized, error: %1%\n") % TTF_GetError())
     );
   }
 
   load_button_font_ = TTF_OpenFont("assets/fonts/OpenSans-Regular.ttf", load_button_font_size_);
   if (load_button_font_ == nullptr) {
-    throw std::runtime_error(boost::str(boost::format("Failed to load font, error: %1\n") % TTF_GetError()));
+    throw std::runtime_error(boost::str(boost::format("Failed to load font, error: %1%\n") % TTF_GetError()));
   }
 
-  explanation_font_ = TTF_OpenFont("assets/fonts/OpenSans-Regular.ttf", explanation_font_size_);
-  if (explanation_font_ == nullptr) {
-    throw std::runtime_error(boost::str(boost::format("Failed to load font, error: %1\n") % TTF_GetError()));
+  small_font_ = TTF_OpenFont("assets/fonts/OpenSans-Regular.ttf", small_font_size_);
+  if (small_font_ == nullptr) {
+    throw std::runtime_error(boost::str(boost::format("Failed to load font, error: %1%\n") % TTF_GetError()));
   }
 
 }
@@ -43,8 +43,8 @@ LoadScene::~LoadScene() {
   TTF_CloseFont(load_button_font_);
   load_button_font_ = nullptr;
 
-  TTF_CloseFont(explanation_font_);
-  explanation_font_ = nullptr;
+  TTF_CloseFont(small_font_);
+  small_font_ = nullptr;
 
   TTF_Quit();
 
@@ -61,12 +61,12 @@ void LoadScene::RunPreLoop() {
   load_button_event_ = NONE;
 
   explanation_text_ = new Text(renderer_,
-                               explanation_font_,
-                               explanation_text_color_,
-                               "Enter comma-separated pairs of words or phrases, with a new-line separating entries.",
+                               small_font_,
+                               small_font_color_,
+                               "Enter CSV file path",
                                1000);
 
-  input_text_ = new Text(renderer_, explanation_font_, explanation_text_color_, inputted_text_);
+  input_text_ = new Text(renderer_, small_font_, small_font_color_, inputted_text_);
 
   SDL_StartTextInput();
 
@@ -81,6 +81,9 @@ void LoadScene::RunPostLoop() {
 
   delete explanation_text_;
   explanation_text_ = nullptr;
+
+  delete error_text_;
+  error_text_ = nullptr;
 
   SDL_StopTextInput();
 
@@ -128,19 +131,57 @@ void LoadScene::RunSingleIterationEventHandler(SDL_Event &event) {
   if (reload_input_text_) {
     delete input_text_;
     // SDL_TTF cannot handle empty string
-    input_text_ = new Text(renderer_, explanation_font_, explanation_text_color_,
+    input_text_ = new Text(renderer_, small_font_, small_font_color_,
                            inputted_text_.empty() ? " " : inputted_text_);
     reload_input_text_ = false;
   }
 
   if (load_button_event_ == PRESSED) {
-    GameScene game_scene = GameScene(renderer_, window_, global_quit_, screen_height_, screen_width_);
-    game_scene.LoadWordsViaString(inputted_text_);
-    game_scene.Run();
 
-    // The loading scene should only be entered from the front; after the game scene runs, we actually want to exit
-    // out of the load scene as well
-    QuitLocal();
+    FileWordLoader word_loader = FileWordLoader(inputted_text_);
+    WordLoader::InputError input_error = word_loader.ParseAndLoadIntoMap();
+
+    if (input_error == WordLoader::InputError::NONE) {
+
+      delete error_text_;
+      error_text_ = nullptr;
+
+    } else {
+
+      std::string error_message;
+      switch (input_error) {
+        case WordLoader::InputError::LINE_CONTAINS_MORE_THAN_ONE_COMMA:
+          error_message =
+              "A line exists in the file with more than one comma; each line must have one comma. Please try again.";
+          break;
+        case WordLoader::InputError::LINE_CONTAINS_NO_COMMA:
+          error_message =
+              "A line exists in the file without a comma; each line must have one comma. Please try again.";
+          break;
+        case WordLoader::InputError::FILE_NOT_FOUND:
+          error_message =
+              "File not found. Please try again.";
+          break;
+        default:
+          throw std::runtime_error(boost::str(boost::format("Unknown input error %1%") % input_error));
+      }
+      error_text_ = new Text(renderer_, small_font_, small_font_color_, error_message, 1000);
+
+    }
+
+    printf("1");
+    if (error_text_ == nullptr) {
+
+      GameScene game_scene = GameScene(renderer_, window_, global_quit_, screen_height_, screen_width_,
+                                       word_loader.GetWordPairMap());
+      game_scene.Run();
+
+      // The loading scene should only be entered from the front; after the game scene runs, we actually want to exit
+      // out of the load scene as well
+      QuitLocal();
+
+    }
+
   }
 
 }
@@ -152,7 +193,7 @@ void LoadScene::RunSingleIterationLoopBody() {
 
   // Render load button in bottom middle
   load_button_->SetTopLeftPosition(screen_width_ / 2 - load_button_width_ / 2,
-                                   screen_height_ - load_button_height_ - 100);
+                                   screen_height_ - load_button_height_ - 300);
   load_button_->Render();
 
   // Render the explanation in the top middle
@@ -162,6 +203,11 @@ void LoadScene::RunSingleIterationLoopBody() {
   // Render the input text
   input_text_->Render(screen_width_ / 2 - input_text_->GetWidth() / 2,
                       explanation_text_->GetHeight() + 100 + input_text_->GetHeight() + 100);
+
+  if (error_text_ != nullptr) {
+    error_text_->Render(screen_width_ / 2 - error_text_->GetWidth() / 2,
+                        screen_height_ - load_button_height_ - 100);
+  }
 
   SDL_RenderPresent(renderer_);
 

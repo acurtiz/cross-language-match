@@ -21,7 +21,7 @@ std::istream &FileWordLoader::OpenInputStream() {
 
   file_stream_ = new std::ifstream(file_path_);
   if (!file_stream_->is_open()) {
-    throw std::runtime_error(boost::str(boost::format("Unable to open file %1") % file_path_));
+    throw std::runtime_error(boost::str(boost::format("Unable to open file %1%") % file_path_));
   }
 
   return *file_stream_;
@@ -34,6 +34,17 @@ void FileWordLoader::CloseInputStream() {
   }
   delete file_stream_;
   file_stream_ = nullptr;
+}
+
+WordLoader::InputError FileWordLoader::ParseAndLoadIntoMap() {
+
+  std::ifstream temp_stream = std::ifstream(file_path_);
+  if (!temp_stream.good()) {
+    return WordLoader::InputError::FILE_NOT_FOUND;
+  }
+
+  return WordLoader::ParseAndLoadIntoMap();
+
 }
 
 }

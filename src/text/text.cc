@@ -18,14 +18,14 @@ Text::Text(SDL_Renderer *renderer, TTF_Font *font, SDL_Color color, std::string 
   }
   if (text_surface == nullptr) {
     throw std::runtime_error(
-        boost::str(boost::format("Unable to render text surface, error: %1\n") % TTF_GetError())
+        boost::str(boost::format("Unable to render text surface, error: %1%\n") % TTF_GetError())
     );
   }
 
   texture_ = SDL_CreateTextureFromSurface(renderer_, text_surface);
   if (texture_ == nullptr) {
     throw std::runtime_error(
-        boost::str(boost::format("Unable to create texture from surface, error: %1\n") % SDL_GetError())
+        boost::str(boost::format("Unable to create texture from surface, error: %1%\n") % SDL_GetError())
     );
   }
 

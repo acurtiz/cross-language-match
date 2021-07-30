@@ -5,40 +5,43 @@
 
 namespace cross_language_match {
 
-std::map<std::string, std::string> *WordLoader::GetWordPairs() {
+WordLoader::InputError WordLoader::ParseAndLoadIntoMap() {
 
-  std::map<std::string, std::string> *word_pairs = new std::map<std::string, std::string>();
+  word_pairs_ = std::map<std::string, std::string>();
 
   std::istream &input_stream = OpenInputStream();
 
   std::string line;
   while (getline(input_stream, line)) {
     std::size_t comma_occurrences = std::count(line.begin(), line.end(), ',');
-    if (comma_occurrences != 1) {
-      throw std::runtime_error(
-          boost::str(boost::format(
-              "Expected one comma per line, found line with %1 occurrences. Line: '%2'") % comma_occurrences % line)
-      );
+    if (comma_occurrences == 0) {
+      return WordLoader::InputError::LINE_CONTAINS_NO_COMMA;
+    } else if (comma_occurrences > 1) {
+      return WordLoader::InputError::LINE_CONTAINS_MORE_THAN_ONE_COMMA;
     }
 
     std::size_t comma_index = line.find(',');
     if (comma_index == std::string::npos) {
       throw std::runtime_error(
-          boost::str(boost::format("Improperly formatted file, line without comma found: %1") % line)
+          boost::str(boost::format("Improperly formatted file, line without comma found: %1%") % line)
       );
     }
 
     std::string left_word = line.substr(0, comma_index);
     std::string right_word = line.substr(comma_index + 1);
 
-    word_pairs->insert(std::pair<std::string, std::string>(left_word, right_word));
+    word_pairs_.insert(std::pair<std::string, std::string>(left_word, right_word));
 
   }
 
   CloseInputStream();
 
-  return word_pairs;
+  return WordLoader::InputError::NONE;
 
+}
+
+std::map<std::string, std::string> WordLoader::GetWordPairMap() {
+  return word_pairs_;
 }
 
 }
