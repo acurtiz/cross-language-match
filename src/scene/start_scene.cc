@@ -1,5 +1,6 @@
 #include <boost/format.hpp>
 #include <button/labeled_button.h>
+#include <scene/load_scene.h>
 #include "scene/start_scene.h"
 #include "scene/game_scene.h"
 #include "scene/help_scene.h"
@@ -97,10 +98,9 @@ void StartScene::RunSingleIterationEventHandler(SDL_Event &event) {
   start_button_event_ = start_button_->HandleEvent(&event);
 
   if (start_button_event_ == PRESSED) {
-    printf("Start button pressed. Going into main game\n");
-    GameScene game_scene = GameScene(renderer_, window_, global_quit_, screen_height_, screen_width_);
-    game_scene.LoadWordsViaFile("assets/txt/test-pairs.csv");
-    game_scene.Run();
+    printf("Start button pressed. Going into load screen\n");
+    LoadScene load_scene = LoadScene(renderer_, window_, global_quit_, screen_height_, screen_width_);
+    load_scene.Run();
   }
 
   if (help_button_event_ == PRESSED) {

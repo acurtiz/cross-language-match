@@ -1,0 +1,49 @@
+#include <SDL2/SDL.h>
+#include <SDL2_ttf/SDL_ttf.h>
+#include "text/text.h"
+#include "button/button.h"
+#include "scene/scene.h"
+
+#ifndef CROSSLANGUAGEMATCH_SRC_SCENE_LOAD_SCENE_H_
+#define CROSSLANGUAGEMATCH_SRC_SCENE_LOAD_SCENE_H_
+
+namespace cross_language_match {
+
+class LoadScene : public Scene {
+
+ public:
+  LoadScene(SDL_Renderer *renderer, SDL_Window *window, bool &global_quit, int screen_height, int screen_width);
+  ~LoadScene();
+  void RunPreLoop() override;
+  void RunPostLoop() override;
+  void RunSingleIterationEventHandler(SDL_Event &event) override;
+  void RunSingleIterationLoopBody() override;
+
+ private:
+
+  TTF_Font *explanation_font_ = nullptr;
+  Text *explanation_text_ = nullptr;
+  const int explanation_font_size_ = 22;
+  SDL_Color explanation_text_color_ = {0, 0, 0};
+
+  Text *load_text_ = nullptr;
+  TTF_Font *load_button_font_ = nullptr;
+  SDL_Color load_button_text_color_ = {0, 0, 0};
+  Button *load_button_ = nullptr;
+  ButtonEvent load_button_event_ = NONE;
+  const int load_button_width_ = 400;
+  const int load_button_height_ = 100;
+  const int load_button_font_size_ = 28;
+
+  const int screen_height_;
+  const int screen_width_;
+
+  bool reload_input_text_ = true;
+  std::string inputted_text_ = "dog,cat\nsky,ground\n";
+  Text *input_text_ = nullptr;
+
+};
+
+}
+
+#endif //CROSSLANGUAGEMATCH_SRC_SCENE_LOAD_SCENE_H_
