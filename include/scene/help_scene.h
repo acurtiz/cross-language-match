@@ -24,7 +24,7 @@ class HelpScene : public Scene {
   TTF_Font *explanation_font_ = nullptr;
   Text *explanation_text_ = nullptr;
   const int explanation_font_size_ = 22;
-  SDL_Color explanation_text_color_ = {0, 0, 0};
+  SDL_Color explanation_text_color_ = {0xFF, 0xFF, 0xFF};
 
   Text *return_text_ = nullptr;
   TTF_Font *return_button_font_ = nullptr;

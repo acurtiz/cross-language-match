@@ -26,6 +26,8 @@ class Scene {
   bool &global_quit_;
   bool local_quit_;
 
+  SDL_Color background_color_ = {0xFF, 0x7F, 0x50, 0xFF};
+
 };
 
 }

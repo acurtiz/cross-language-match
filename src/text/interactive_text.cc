@@ -93,7 +93,11 @@ void InteractiveText::Render() {
   }
 
   if (linked_interactive_text_ != nullptr) {
-    SDL_SetRenderDrawColor(renderer_, 0xDA, 0x70, 0xD6, 0xFF); // orchid
+    SDL_SetRenderDrawColor(renderer_,
+                           interactive_line_color_.r,
+                           interactive_line_color_.g,
+                           interactive_line_color_.b,
+                           interactive_line_color_.a);
     SDL_RenderDrawLine(renderer_,
                        left_interactive_text->top_left_x_ + left_interactive_text->width_,
                        left_interactive_text->top_left_y_ + left_interactive_text->height_ / 2,
@@ -102,9 +106,17 @@ void InteractiveText::Render() {
   }
 
   if (is_highlighted_) {
-    SDL_SetRenderDrawColor(renderer_, 0xDA, 0x70, 0xD6, 0xFF); // orchid
+    SDL_SetRenderDrawColor(renderer_,
+                           interactive_text_highlight_color_.r,
+                           interactive_text_highlight_color_.g,
+                           interactive_text_highlight_color_.b,
+                           interactive_text_highlight_color_.a);
   } else {
-    SDL_SetRenderDrawColor(renderer_, 0xFF, 0xCD, 0x58, 0xFF); // black
+    SDL_SetRenderDrawColor(renderer_,
+                           interactive_text_non_highlight_color_.r,
+                           interactive_text_non_highlight_color_.b,
+                           interactive_text_non_highlight_color_.g,
+                           interactive_text_non_highlight_color_.a);
   }
 
   SDL_RenderFillRect(renderer_, &padding_rect);

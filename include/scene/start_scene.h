@@ -24,7 +24,7 @@ class StartScene : public Scene {
   TTF_Font *title_font_ = nullptr;
   Text *title_text_ = nullptr;
   const int title_font_size_ = 44;
-  SDL_Color title_text_color_ = {0, 0, 0};
+  SDL_Color title_text_color_ = {0xFF, 0xFF, 0xFF};
 
   TTF_Font *button_font_ = nullptr;
   const int button_font_size_ = 28;

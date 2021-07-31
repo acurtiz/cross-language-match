@@ -36,7 +36,9 @@ class GameScene : public Scene {
                                                    std::vector<InteractiveText *> *b);
 
   TTF_Font *font_ = nullptr;
-  SDL_Color text_color_ = {0, 0, 0};
+  SDL_Color plain_text_color_ = {0xFF, 0xFF, 0xFF};
+  SDL_Color button_text_color_ = {0, 0, 0};
+  SDL_Color interactive_text_color_ = {0xFF, 0xFF, 0xFF};
 
   Text *incorrect_text_ = nullptr;
   Text *correct_text_ = nullptr;

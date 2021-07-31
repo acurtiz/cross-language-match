@@ -16,8 +16,6 @@ StartScene::StartScene(SDL_Renderer *renderer,
       screen_height_(screen_height),
       screen_width_(screen_width) {
 
-  SDL_SetRenderDrawColor(renderer_, 0x00, 0x00, 0x00, 0xFF);
-
   if (TTF_Init() == -1) {
     throw std::runtime_error(
         boost::str(boost::format("SDL_ttf could not be initialized, error: %1%\n") % TTF_GetError())
@@ -50,9 +48,8 @@ StartScene::~StartScene() {
 
 void StartScene::RunPreLoop() {
 
-  SDL_SetRenderDrawColor(renderer_, 0xFF, 0xFF, 0xFF, 0xFF);
+  SDL_SetRenderDrawColor(renderer_, background_color_.r, background_color_.g, background_color_.b, background_color_.a);
   SDL_RenderClear(renderer_);
-  SDL_RenderPresent(renderer_);
 
   start_text_ = new Text(renderer_, button_font_, start_text_color_, "Start the game!");
   start_button_ = new LabeledButton(renderer_, start_button_width_, start_button_height_, start_text_);
@@ -113,7 +110,7 @@ void StartScene::RunSingleIterationEventHandler(SDL_Event &event) {
 
 void StartScene::RunSingleIterationLoopBody() {
 
-  SDL_SetRenderDrawColor(renderer_, 0xFF, 0xFF, 0xFF, 0xFF);
+  SDL_SetRenderDrawColor(renderer_, background_color_.r, background_color_.g, background_color_.b, background_color_.a);
   SDL_RenderClear(renderer_);
 
   // Render start button in bottom middle

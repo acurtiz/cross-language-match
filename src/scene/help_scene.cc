@@ -13,8 +13,6 @@ HelpScene::HelpScene(SDL_Renderer *renderer,
       screen_height_(screen_height),
       screen_width_(screen_width) {
 
-  SDL_SetRenderDrawColor(renderer_, 0x00, 0x00, 0x00, 0xFF);
-
   if (TTF_Init() == -1) {
     throw std::runtime_error(
         boost::str(boost::format("SDL_ttf could not be initialized, error: %1%\n") % TTF_GetError())
@@ -47,9 +45,8 @@ HelpScene::~HelpScene() {
 
 void HelpScene::RunPreLoop() {
 
-  SDL_SetRenderDrawColor(renderer_, 0xFF, 0xFF, 0xFF, 0xFF);
+  SDL_SetRenderDrawColor(renderer_, background_color_.r, background_color_.g, background_color_.b, background_color_.a);
   SDL_RenderClear(renderer_);
-  SDL_RenderPresent(renderer_);
 
   return_text_ = new Text(renderer_, return_button_font_, return_text_color_, "Return to Main Menu");
   return_button_ = new LabeledButton(renderer_, return_button_width_, return_button_height_, return_text_);
@@ -94,7 +91,7 @@ void HelpScene::RunSingleIterationEventHandler(SDL_Event &event) {
 
 void HelpScene::RunSingleIterationLoopBody() {
 
-  SDL_SetRenderDrawColor(renderer_, 0xFF, 0xFF, 0xFF, 0xFF);
+  SDL_SetRenderDrawColor(renderer_, background_color_.r, background_color_.g, background_color_.b, background_color_.a);
   SDL_RenderClear(renderer_);
 
   // Render submit button in bottom middle

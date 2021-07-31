@@ -24,7 +24,7 @@ class Button {
   int height_;
  private:
   SDL_Renderer *renderer_;
-  const SDL_Color initial_color_ = {0xAA, 0xAA, 0xD6, 0xFF};
+  const SDL_Color initial_color_ = {0x93, 0xE9, 0xBE, 0xFF};
   SDL_Color current_color_ = initial_color_;
 
 };

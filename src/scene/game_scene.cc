@@ -18,8 +18,6 @@ GameScene::GameScene(SDL_Renderer *renderer,
       screen_height_(screen_height),
       screen_width_(screen_width) {
 
-  SDL_SetRenderDrawColor(renderer_, 0x00, 0x00, 0x00, 0xFF);
-
   if (TTF_Init() == -1) {
     throw std::runtime_error(
         boost::str(boost::format("SDL_ttf could not be initialized, error: %1%\n") % TTF_GetError())
@@ -51,20 +49,19 @@ GameScene::~GameScene() {
 
 void GameScene::RunPreLoop() {
 
-  SDL_SetRenderDrawColor(renderer_, 0xFF, 0xFF, 0xFF, 0xFF);
+  SDL_SetRenderDrawColor(renderer_, background_color_.r, background_color_.g, background_color_.b, background_color_.a);
   SDL_RenderClear(renderer_);
-  SDL_RenderPresent(renderer_);
 
   PrepareCurrentWords();
 
-  incorrect_text_ = new Text(renderer_, font_, text_color_, "Incorrect; please try again.");
-  correct_text_ = new Text(renderer_, font_, text_color_, "Correct - well done!");
+  incorrect_text_ = new Text(renderer_, font_, plain_text_color_, "Incorrect; please try again.");
+  correct_text_ = new Text(renderer_, font_, plain_text_color_, "Correct - well done!");
 
-  submit_text_ = new Text(renderer_, font_, text_color_, "Submit");
+  submit_text_ = new Text(renderer_, font_, button_text_color_, "Submit");
   submit_button_ = new LabeledButton(renderer_, submit_button_width_, submit_button_height_, submit_text_);
-  next_round_text_ = new Text(renderer_, font_, text_color_, "Next Round");
+  next_round_text_ = new Text(renderer_, font_, button_text_color_, "Next Round");
   next_round_button_ = new LabeledButton(renderer_, next_button_width_, next_button_height_, next_round_text_);
-  return_text_ = new Text(renderer_, font_, text_color_, "Main Menu");
+  return_text_ = new Text(renderer_, font_, button_text_color_, "Main Menu");
   return_button_ = new LabeledButton(renderer_, return_button_width_, return_button_height_, return_text_);
   submit_button_event_ = NONE;
   next_round_button_event_ = NONE;
@@ -154,7 +151,7 @@ void GameScene::RunSingleIterationEventHandler(SDL_Event &event) {
 
 void GameScene::RunSingleIterationLoopBody() {
 
-  SDL_SetRenderDrawColor(renderer_, 0xFF, 0xFF, 0xFF, 0xFF);
+  SDL_SetRenderDrawColor(renderer_, background_color_.r, background_color_.g, background_color_.b, background_color_.a);
   SDL_RenderClear(renderer_);
 
   // Render left column
@@ -229,10 +226,10 @@ void GameScene::PrepareCurrentWords() {
   // Allocate new InteractiveText objects for current word pairs and add them to the vectors
   for (auto &word_pair : *current_word_pairs_) {
     left_words_->push_back(
-        new InteractiveText(renderer_, new Text(renderer_, font_, text_color_, word_pair.first), LEFT)
+        new InteractiveText(renderer_, new Text(renderer_, font_, interactive_text_color_, word_pair.first), LEFT)
     );
     right_words_->push_back(
-        new InteractiveText(renderer_, new Text(renderer_, font_, text_color_, word_pair.second), RIGHT)
+        new InteractiveText(renderer_, new Text(renderer_, font_, interactive_text_color_, word_pair.second), RIGHT)
     );
   }
 
