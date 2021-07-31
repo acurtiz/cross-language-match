@@ -170,24 +170,26 @@ void GameScene::RunSingleIterationLoopBody() {
     y += right_word->GetHeight() + padding_individual_words_;
   }
 
-  // Render submit button in bottom left
-  submit_button_->SetTopLeftPosition(10, screen_height_ - submit_button_height_ - 10);
+  // Render submit button in bottom right
+  submit_button_->SetTopLeftPosition(screen_width_ - 10 - submit_button_width_,
+                                     screen_height_ - submit_button_height_ - 10);
   submit_button_->Render();
 
-  // Render return button in the bottom right
-  return_button_->SetTopLeftPosition(screen_width_ - 10 - return_button_width_,
+  // Render return button in the bottom left
+  return_button_->SetTopLeftPosition(10,
                                      screen_height_ - return_button_height_ - 10);
   return_button_->Render();
 
-  // Render next round button to the right of the submit button, as well as a congratulations message in the middle
   if (current_round_is_complete_) {
 
+    // Render next round button to the left of the submit button
     if (!all_rounds_complete_) {
-      next_round_button_->SetTopLeftPosition(10 + submit_button_width_ + 10,
+      next_round_button_->SetTopLeftPosition(screen_width_ - 10 - submit_button_width_ - 10 - next_button_width_,
                                              screen_height_ - next_button_height_ - 10);
       next_round_button_->Render();
     }
 
+    // Render congratulations text in the middle of the bottom of the screen
     correct_text_->Render(screen_width_ / 2 - correct_text_->GetWidth() / 2,
                           screen_height_ - correct_text_->GetHeight() - 10);
   }
