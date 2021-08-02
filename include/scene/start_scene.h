@@ -1,5 +1,5 @@
 #include <SDL2/SDL.h>
-#include <SDL2_ttf/SDL_ttf.h>
+#include <SDL_ttf.h>
 #include "scene/scene.h"
 #include "text/text.h"
 #include "button/button.h"

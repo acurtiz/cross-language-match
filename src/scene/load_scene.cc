@@ -1,5 +1,5 @@
 #include <SDL2/SDL.h>
-#include <SDL2_ttf/SDL_ttf.h>
+#include <SDL_ttf.h>
 #include <boost/format.hpp>
 #include "scene/load_scene.h"
 #include "button/labeled_button.h"

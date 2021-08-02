@@ -5,6 +5,9 @@
 #include <algorithm>
 #include <boost/format.hpp>
 #include "word_loader/file_word_loader.h"
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
 
 namespace cross_language_match {
 

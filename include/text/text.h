@@ -1,5 +1,5 @@
 #include "SDL2/SDL.h"
-#include "SDL2_ttf/SDL_ttf.h"
+#include <SDL_ttf.h>
 #include <string>
 
 #ifndef CROSSLANGUAGEMATCH_INCLUDE_TEXT_H_

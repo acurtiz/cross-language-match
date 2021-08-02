@@ -5,3 +5,7 @@
 cmake-build-debug/
 build/
 CrossLanguageMatch
+CrossLanguageMatch.data
+CrossLanguageMatch.html
+CrossLanguageMatch.js
+CrossLanguageMatch.wasm

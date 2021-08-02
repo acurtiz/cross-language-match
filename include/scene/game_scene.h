@@ -1,6 +1,6 @@
 #include <string>
 #include <map>
-#include <SDL2_ttf/SDL_ttf.h>
+#include <SDL_ttf.h>
 #include <button/button.h>
 #include "scene.h"
 #include "text/interactive_text.h"

@@ -1,6 +1,6 @@
 #include <string>
 #include <boost/format.hpp>
-#include <SDL2_ttf/SDL_ttf.h>
+#include <SDL_ttf.h>
 #include "text/text.h"
 
 namespace cross_language_match {

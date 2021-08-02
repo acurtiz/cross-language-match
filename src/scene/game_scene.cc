@@ -235,8 +235,7 @@ void GameScene::PrepareCurrentWords() {
     );
   }
 
-  // Shuffle so the words are not displayed at equal levels in the GUI
-  Shuffle(left_words_);
+  // Shuffle so the left words and right words do not match up in the GUI
   Shuffle(right_words_);
 
   left_and_right_words_ = GetUnifiedVector(left_words_, right_words_);
