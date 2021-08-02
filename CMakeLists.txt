@@ -27,12 +27,6 @@ find_library(SDL2_IMAGE_LIBRARY
         HINTS /Library/Frameworks)
 target_link_libraries(CrossLanguageMatch LINK_PUBLIC ${SDL2_IMAGE_LIBRARY})
 
-# Link to SDL2_mixer library (simplifies audio)
-find_library(SDL2_MIXER_LIBRARY
-        NAMES SDL2_mixer
-        HINTS /Library/Frameworks)
-target_link_libraries(CrossLanguageMatch LINK_PUBLIC ${SDL2_MIXER_LIBRARY})
-
 # Link to SDL2_tff library (for fonts)
 find_library(SDL2_TTF_LIBRARY
         NAMES SDL2_ttf
