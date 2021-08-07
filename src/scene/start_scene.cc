@@ -1,6 +1,9 @@
 #include <boost/format.hpp>
-#include <button/labeled_button.h>
-#include <scene/load_scene.h>
+#include "button/labeled_button.h"
+#include "scene/load_scene.h"
+#ifdef __EMSCRIPTEN__
+#include "scene/load_scene_emscripten.h"
+#endif
 #include "scene/start_scene.h"
 #include "scene/game_scene.h"
 #include "scene/help_scene.h"
@@ -51,8 +54,9 @@ void StartScene::RunPreLoop() {
   SDL_SetRenderDrawColor(renderer_, background_color_.r, background_color_.g, background_color_.b, background_color_.a);
   SDL_RenderClear(renderer_);
 
-  start_text_ = new Text(renderer_, button_font_, start_text_color_, "Start the game!");
-  start_button_ = new LabeledButton(renderer_, start_button_width_, start_button_height_, start_text_);
+  start_text_ = new Text(renderer_, button_font_, start_text_color_, "Start the game");
+  start_button_ =
+      new LabeledButton(renderer_, start_button_width_, start_button_height_, start_text_);
   start_button_event_ = NONE;
 
   help_text_ = new Text(renderer_, button_font_, help_text_color_, "How to play");
@@ -95,15 +99,21 @@ void StartScene::RunSingleIterationEventHandler(SDL_Event &event) {
   start_button_event_ = start_button_->HandleEvent(&event);
 
   if (start_button_event_ == PRESSED) {
-    printf("Start button pressed. Going into load screen\n");
+
+#ifdef __EMSCRIPTEN__
+    LoadSceneEmscripten load_scene = LoadSceneEmscripten(renderer_, window_, global_quit_, screen_height_, screen_width_);
+    load_scene.Run();
+#else
     LoadScene load_scene = LoadScene(renderer_, window_, global_quit_, screen_height_, screen_width_);
     load_scene.Run();
-  }
+#endif
 
-  if (help_button_event_ == PRESSED) {
+  } else if (help_button_event_ == PRESSED) {
+
     printf("Help button pressed. Going into help menu\n");
     HelpScene help_scene = HelpScene(renderer_, window_, global_quit_, screen_height_, screen_width_);
     help_scene.Run();
+
   }
 
 }
