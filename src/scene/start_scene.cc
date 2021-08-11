@@ -1,9 +1,6 @@
 #include <boost/format.hpp>
 #include "button/labeled_button.h"
 #include "scene/load_scene.h"
-#ifdef __EMSCRIPTEN__
-#include "scene/load_scene_emscripten.h"
-#endif
 #include "scene/start_scene.h"
 #include "scene/game_scene.h"
 #include "scene/help_scene.h"
@@ -100,13 +97,9 @@ void StartScene::RunSingleIterationEventHandler(SDL_Event &event) {
 
   if (start_button_event_ == PRESSED) {
 
-#ifdef __EMSCRIPTEN__
-    LoadSceneEmscripten load_scene = LoadSceneEmscripten(renderer_, window_, global_quit_, screen_height_, screen_width_);
+    LoadScene
+        load_scene = LoadScene(renderer_, window_, global_quit_, screen_height_, screen_width_);
     load_scene.Run();
-#else
-    LoadScene load_scene = LoadScene(renderer_, window_, global_quit_, screen_height_, screen_width_);
-    load_scene.Run();
-#endif
 
   } else if (help_button_event_ == PRESSED) {
 

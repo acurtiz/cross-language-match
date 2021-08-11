@@ -5,8 +5,8 @@
 #include "scene.h"
 #include "text/interactive_text.h"
 
-#ifndef CROSSLANGUAGEMATCH_SRC_GAME_SCENE_H_
-#define CROSSLANGUAGEMATCH_SRC_GAME_SCENE_H_
+#ifndef CROSSLANGUAGEMATCH_INCLUDE_GAME_SCENE_H_
+#define CROSSLANGUAGEMATCH_INCLUDE_GAME_SCENE_H_
 
 namespace cross_language_match {
 
@@ -87,4 +87,4 @@ class GameScene : public Scene {
 
 }
 
-#endif //CROSSLANGUAGEMATCH_SRC_GAME_SCENE_H_
+#endif //CROSSLANGUAGEMATCH_INCLUDE_GAME_SCENE_H_

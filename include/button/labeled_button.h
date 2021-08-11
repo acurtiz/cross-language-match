@@ -1,8 +1,8 @@
 #include "button.h"
 #include "text/text.h"
 
-#ifndef CROSSLANGUAGEMATCH_SRC_LABELED_BUTTON_H_
-#define CROSSLANGUAGEMATCH_SRC_LABELED_BUTTON_H_
+#ifndef CROSSLANGUAGEMATCH_INCLUDE_LABELED_BUTTON_H_
+#define CROSSLANGUAGEMATCH_INCLUDE_LABELED_BUTTON_H_
 
 namespace cross_language_match {
 
@@ -16,4 +16,4 @@ class LabeledButton : public Button {
 
 }
 
-#endif //CROSSLANGUAGEMATCH_SRC_LABELED_BUTTON_H_
+#endif //CROSSLANGUAGEMATCH_INCLUDE_LABELED_BUTTON_H_

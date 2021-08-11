@@ -1,8 +1,5 @@
 #include "scene/scene.h"
-
-#ifdef __EMSCRIPTEN__
 #include <emscripten.h>
-#endif
 
 namespace cross_language_match {
 
@@ -38,9 +35,7 @@ void Scene::Run() {
 
     RunSingleIterationLoopBody();
 
-#ifdef __EMSCRIPTEN__
     emscripten_sleep(100);
-#endif
 
   }
 

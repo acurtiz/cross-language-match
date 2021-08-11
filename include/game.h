@@ -5,8 +5,8 @@
 #include <map>
 #include "text/interactive_text.h"
 
-#ifndef CROSSLANGUAGEMATCH_SRC_GAME_H_
-#define CROSSLANGUAGEMATCH_SRC_GAME_H_
+#ifndef CROSSLANGUAGEMATCH_INCLUDE_GAME_H_
+#define CROSSLANGUAGEMATCH_INCLUDE_GAME_H_
 
 namespace cross_language_match {
 
@@ -27,4 +27,4 @@ class Game {
 };
 
 }
-#endif //CROSSLANGUAGEMATCH_SRC_GAME_H_
+#endif //CROSSLANGUAGEMATCH_INCLUDE_GAME_H_

@@ -4,8 +4,8 @@
 #include "text/text.h"
 #include "scene/scene.h"
 
-#ifndef CROSSLANGUAGEMATCH_SRC_SCENE_HELP_SCENE_H_
-#define CROSSLANGUAGEMATCH_SRC_SCENE_HELP_SCENE_H_
+#ifndef CROSSLANGUAGEMATCH_INCLUDE_SCENE_HELP_SCENE_H_
+#define CROSSLANGUAGEMATCH_INCLUDE_SCENE_HELP_SCENE_H_
 
 namespace cross_language_match {
 
@@ -41,4 +41,4 @@ class HelpScene : public Scene {
 };
 
 }
-#endif //CROSSLANGUAGEMATCH_SRC_SCENE_HELP_SCENE_H_
+#endif //CROSSLANGUAGEMATCH_INCLUDE_SCENE_HELP_SCENE_H_

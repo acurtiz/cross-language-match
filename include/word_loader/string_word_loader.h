@@ -4,8 +4,8 @@
 #include <istream>
 #include "word_loader.h"
 
-#ifndef CROSSLANGUAGEMATCH_SRC_STRING_WORD_LOADER_H_
-#define CROSSLANGUAGEMATCH_SRC_STRING_WORD_LOADER_H_
+#ifndef CROSSLANGUAGEMATCH_INCLUDE_STRING_WORD_LOADER_H_
+#define CROSSLANGUAGEMATCH_INCLUDE_STRING_WORD_LOADER_H_
 
 namespace cross_language_match {
 
@@ -24,4 +24,4 @@ class StringWordLoader : public WordLoader {
 
 }
 
-#endif //CROSSLANGUAGEMATCH_SRC_STRING_WORD_LOADER_H_
+#endif //CROSSLANGUAGEMATCH_INCLUDE_STRING_WORD_LOADER_H_

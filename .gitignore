@@ -3,6 +3,7 @@
 *~
 *#
 cmake-build-debug/
+cmake-build-debug-emscripten/
 build/
 CrossLanguageMatch
 CrossLanguageMatch.data
