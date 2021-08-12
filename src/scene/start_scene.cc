@@ -53,15 +53,23 @@ void StartScene::RunPreLoop() {
 
   start_text_ = new Text(renderer_, button_font_, start_text_color_, "Start the game");
   start_button_ =
-      new LabeledButton(renderer_, start_button_width_, start_button_height_, start_text_);
+      new LabeledButton(Button(Rectangle(renderer_, button_width_, button_height_)), start_text_);
   start_button_event_ = NONE;
 
   help_text_ = new Text(renderer_, button_font_, help_text_color_, "How to play");
-  help_button_ = new LabeledButton(renderer_, help_button_width_, help_button_height_, help_text_);
+  help_button_ =
+      new LabeledButton(Button(Rectangle(renderer_, button_width_, button_height_)), help_text_);
   help_button_event_ = NONE;
 
   title_text_ = new Text(renderer_, title_font_, title_text_color_, "Cross Language Match");
 
+  // Render start button at the bottom middle of the screen
+  start_button_->SetTopLeftPosition(screen_width_ / 2 - start_button_->GetWidth() / 2,
+                                    screen_height_ - start_button_->GetHeight() - 100);
+
+  // Render the help button above the start button, with 100 pixel gap
+  help_button_->SetTopLeftPosition(screen_width_ / 2 - help_button_->GetWidth() / 2,
+                                   start_button_->GetTopLeftY() - start_button_->GetHeight() - 100);
 }
 
 void StartScene::RunPostLoop() {
@@ -116,14 +124,7 @@ void StartScene::RunSingleIterationLoopBody() {
   SDL_SetRenderDrawColor(renderer_, background_color_.r, background_color_.g, background_color_.b, background_color_.a);
   SDL_RenderClear(renderer_);
 
-  // Render start button in bottom middle
-  start_button_->SetTopLeftPosition(screen_width_ / 2 - start_button_width_ / 2,
-                                    screen_height_ - start_button_height_ - 100);
   start_button_->Render();
-
-  // Render the help button above the start button
-  help_button_->SetTopLeftPosition(screen_width_ / 2 - help_button_width_ / 2,
-                                   screen_height_ - help_button_height_ - start_button_height_ - 200);
   help_button_->Render();
 
   // Render the game title in the top middle

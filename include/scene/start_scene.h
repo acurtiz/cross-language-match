@@ -34,15 +34,13 @@ class StartScene : public Scene {
   ButtonEvent start_button_event_ = NONE;
 
   SDL_Color start_text_color_ = {0, 0, 0};
-  const int start_button_width_ = 300;
-  const int start_button_height_ = 50;
+  const int button_width_ = 300;
+  const int button_height_ = 50;
 
   Text *help_text_ = nullptr;
   SDL_Color help_text_color_ = {0, 0, 0};
   Button *help_button_ = nullptr;
   ButtonEvent help_button_event_ = NONE;
-  const int help_button_width_ = 300;
-  const int help_button_height_ = 50;
 
   const int screen_height_;
   const int screen_width_;

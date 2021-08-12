@@ -72,7 +72,7 @@ LoadScene::LoadScene(SDL_Renderer *renderer,
     );
   }
 
-  button_font_ = TTF_OpenFont("assets/fonts/OpenSans-Regular.ttf", load_button_font_size_);
+  button_font_ = TTF_OpenFont("assets/fonts/OpenSans-Regular.ttf", wide_button_font_size_);
   if (button_font_ == nullptr) {
     throw std::runtime_error(boost::str(boost::format("Failed to load font, error: %1%\n") % TTF_GetError()));
   }
@@ -102,15 +102,18 @@ void LoadScene::RunPreLoop() {
   SDL_RenderClear(renderer_);
 
   load_text_ = new Text(renderer_, button_font_, button_text_color_, "Load File");
-  load_button_ = new LabeledButton(renderer_, load_button_width_, load_button_height_, load_text_);
+  load_button_ =
+      new LabeledButton(Button(Rectangle(renderer_, wide_button_width_, wide_button_height_)), load_text_);
   load_button_event_ = NONE;
 
   begin_text_ = new Text(renderer_, button_font_, button_text_color_, "Begin");
-  begin_button_ = new LabeledButton(renderer_, load_button_width_, load_button_height_, begin_text_);
+  begin_button_ =
+      new LabeledButton(Button(Rectangle(renderer_, wide_button_width_, wide_button_height_)), begin_text_);
   begin_button_event_ = NONE;
 
   return_button_text_ = new Text(renderer_, button_font_, button_text_color_, "Main Menu");
-  return_button_ = new LabeledButton(renderer_, return_button_width_, return_button_height_, return_button_text_);
+  return_button_ =
+      new LabeledButton(Button(Rectangle(renderer_, return_button_width_, return_button_height_)), return_button_text_);
   return_button_event_ = NONE;
 
   explanation_text_ = new Text(renderer_,
@@ -118,6 +121,18 @@ void LoadScene::RunPreLoop() {
                                small_font_color_,
                                "Use the buttons outside the canvas to choose and then load the file, then click Begin.",
                                1000);
+
+  load_button_->SetTopLeftPosition(screen_width_ / 2 - load_button_->GetWidth() / 2,
+                                   screen_height_ - load_button_->GetHeight() - 300);
+
+  // Set begin button to be just below the load button
+  begin_button_->SetTopLeftPosition(screen_width_ / 2 - begin_button_->GetWidth() / 2,
+                                    load_button_->GetTopLeftY() + load_button_->GetHeight() + begin_button_->GetHeight()
+                                        + 150);
+
+  // Set the return button to be in the bottom right
+  return_button_->SetTopLeftPosition(screen_width_ - 10 - return_button_->GetWidth(),
+                                     screen_height_ - return_button_->GetHeight() - 10);
 
 }
 
@@ -262,25 +277,12 @@ void LoadScene::RunSingleIterationLoopBody() {
   SDL_SetRenderDrawColor(renderer_, background_color_.r, background_color_.g, background_color_.b, background_color_.a);
   SDL_RenderClear(renderer_);
 
-  // Render load button in bottom middle
-  load_button_->SetTopLeftPosition(screen_width_ / 2 - load_button_width_ / 2,
-                                   screen_height_ - load_button_height_ - 300);
   load_button_->Render();
-
-  // Render begin button below the load button
-  if (IsFileReadyForGame()) {
-
-    begin_button_->SetTopLeftPosition(screen_width_ / 2 - load_button_width_ / 2,
-                                      screen_height_ - load_button_height_ - 150);
-    begin_button_->Render();
-
-  }
-
-
-  // Render return button in bottom right
-  return_button_->SetTopLeftPosition(screen_width_ - 10 - return_button_width_,
-                                     screen_height_ - return_button_height_ - 10);
   return_button_->Render();
+
+  if (IsFileReadyForGame()) {
+    begin_button_->Render();
+  }
 
   // Render the explanation in the top middle
   explanation_text_->Render(screen_width_ / 2 - explanation_text_->GetWidth() / 2,
@@ -288,7 +290,7 @@ void LoadScene::RunSingleIterationLoopBody() {
 
   if (error_text_ != nullptr) {
     error_text_->Render(screen_width_ / 2 - error_text_->GetWidth() / 2,
-                        screen_height_ - load_button_height_ - 100);
+                        screen_height_ - wide_button_height_ - 100);
   }
 
   SDL_RenderPresent(renderer_);

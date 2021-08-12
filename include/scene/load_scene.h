@@ -57,9 +57,11 @@ class LoadScene : public Scene {
 
   TTF_Font *button_font_ = nullptr;
   SDL_Color button_text_color_ = {0, 0, 0};
-  const int load_button_width_ = 400;
-  const int load_button_height_ = 100;
-  const int load_button_font_size_ = 28;
+
+  const int wide_button_width_ = 400;
+  const int wide_button_height_ = 100;
+  const int wide_button_font_size_ = 28;
+
   const int return_button_width_ = 200;
   const int return_button_height_ = 100;
 

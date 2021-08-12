@@ -58,15 +58,29 @@ void GameScene::RunPreLoop() {
   correct_text_ = new Text(renderer_, font_, plain_text_color_, "Correct - well done!");
 
   submit_text_ = new Text(renderer_, font_, button_text_color_, "Submit");
-  submit_button_ = new LabeledButton(renderer_, submit_button_width_, submit_button_height_, submit_text_);
+  submit_button_ =
+      new LabeledButton(Button(Rectangle(renderer_, button_width_, button_height_)), submit_text_);
   next_round_text_ = new Text(renderer_, font_, button_text_color_, "Next Round");
-  next_round_button_ = new LabeledButton(renderer_, next_button_width_, next_button_height_, next_round_text_);
+  next_round_button_ =
+      new LabeledButton(Button(Rectangle(renderer_, button_width_, button_height_)), next_round_text_);
   return_text_ = new Text(renderer_, font_, button_text_color_, "Main Menu");
-  return_button_ = new LabeledButton(renderer_, return_button_width_, return_button_height_, return_text_);
+  return_button_ =
+      new LabeledButton(Button(Rectangle(renderer_, button_width_, button_height_)), return_text_);
   submit_button_event_ = NONE;
   next_round_button_event_ = NONE;
   return_button_event_ = NONE;
 
+  // Submit button is in the bottom right
+  submit_button_->SetTopLeftPosition(screen_width_ - 10 - submit_button_->GetWidth(),
+                                     screen_height_ - submit_button_->GetHeight() - 10);
+
+  // Return button is in bottom left
+  return_button_->SetTopLeftPosition(10,
+                                     screen_height_ - return_button_->GetHeight() - 10);
+
+  // Next round button is just to the left of the submit button
+  next_round_button_->SetTopLeftPosition(submit_button_->GetTopLeftX() - next_round_button_->GetWidth() - 10,
+                                         submit_button_->GetTopLeftY());
 }
 
 void GameScene::RunPostLoop() {
@@ -170,26 +184,15 @@ void GameScene::RunSingleIterationLoopBody() {
     y += right_word->GetHeight() + padding_individual_words_;
   }
 
-  // Render submit button in bottom right
-  submit_button_->SetTopLeftPosition(screen_width_ - 10 - submit_button_width_,
-                                     screen_height_ - submit_button_height_ - 10);
   submit_button_->Render();
-
-  // Render return button in the bottom left
-  return_button_->SetTopLeftPosition(10,
-                                     screen_height_ - return_button_height_ - 10);
   return_button_->Render();
 
+  if (current_round_is_complete_ && !all_rounds_complete_) {
+    next_round_button_->Render();
+  }
+
+  // Render congratulations text in the middle of the bottom of the screen
   if (current_round_is_complete_) {
-
-    // Render next round button to the left of the submit button
-    if (!all_rounds_complete_) {
-      next_round_button_->SetTopLeftPosition(screen_width_ - 10 - submit_button_width_ - 10 - next_button_width_,
-                                             screen_height_ - next_button_height_ - 10);
-      next_round_button_->Render();
-    }
-
-    // Render congratulations text in the middle of the bottom of the screen
     correct_text_->Render(screen_width_ / 2 - correct_text_->GetWidth() / 2,
                           screen_height_ - correct_text_->GetHeight() - 10);
   }

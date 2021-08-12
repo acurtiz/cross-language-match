@@ -29,11 +29,13 @@ class HelpScene : public Scene {
   Text *return_text_ = nullptr;
   TTF_Font *return_button_font_ = nullptr;
   SDL_Color return_text_color_ = {0, 0, 0};
+
   Button *return_button_ = nullptr;
   ButtonEvent return_button_event_ = NONE;
-  const int return_button_width_ = 400;
-  const int return_button_height_ = 100;
-  const int return_button_font_size_ = 28;
+
+  const int button_width_ = 400;
+  const int button_height_ = 100;
+  const int button_font_size_ = 28;
 
   const int screen_height_;
   const int screen_width_;

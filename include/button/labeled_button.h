@@ -8,8 +8,8 @@ namespace cross_language_match {
 
 class LabeledButton : public Button {
  public:
-  LabeledButton(SDL_Renderer *renderer, int width, int height, Text *label);
-  void Render() override;
+  LabeledButton(Button button, Text *label);
+  void Render();
  private:
   Text *label_;
 };

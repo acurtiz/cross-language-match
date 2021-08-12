@@ -19,7 +19,7 @@ HelpScene::HelpScene(SDL_Renderer *renderer,
     );
   }
 
-  return_button_font_ = TTF_OpenFont("assets/fonts/OpenSans-Regular.ttf", return_button_font_size_);
+  return_button_font_ = TTF_OpenFont("assets/fonts/OpenSans-Regular.ttf", button_font_size_);
   if (return_button_font_ == nullptr) {
     throw std::runtime_error(boost::str(boost::format("Failed to load font, error: %1%\n") % TTF_GetError()));
   }
@@ -49,7 +49,8 @@ void HelpScene::RunPreLoop() {
   SDL_RenderClear(renderer_);
 
   return_text_ = new Text(renderer_, return_button_font_, return_text_color_, "Return to Main Menu");
-  return_button_ = new LabeledButton(renderer_, return_button_width_, return_button_height_, return_text_);
+  return_button_ =
+      new LabeledButton(Button(Rectangle(renderer_, button_width_, button_height_)), return_text_);
   return_button_event_ = NONE;
 
   explanation_text_ = new Text(renderer_,
@@ -60,6 +61,10 @@ void HelpScene::RunPreLoop() {
                                "with the corresponding word or phrase in the right column. "
                                "Left-click to select a word, and left click on the corresponding word to form a link. "
                                "Right-click an existing word that is linked to remove that link.", 1000);
+
+  // Set submit button position to be in bottom middle
+  return_button_->SetTopLeftPosition(screen_width_ / 2 - return_button_->GetWidth() / 2,
+                                     screen_height_ - return_button_->GetHeight() - 100);
 
 }
 
@@ -94,9 +99,6 @@ void HelpScene::RunSingleIterationLoopBody() {
   SDL_SetRenderDrawColor(renderer_, background_color_.r, background_color_.g, background_color_.b, background_color_.a);
   SDL_RenderClear(renderer_);
 
-  // Render submit button in bottom middle
-  return_button_->SetTopLeftPosition(screen_width_ / 2 - return_button_width_ / 2,
-                                     screen_height_ - return_button_height_ - 100);
   return_button_->Render();
 
   // Render the game title in the top middle
