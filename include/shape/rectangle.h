@@ -8,11 +8,12 @@ namespace cross_language_match {
 class Rectangle {
 
  public:
+  explicit Rectangle(SDL_Renderer *renderer);
   Rectangle(SDL_Renderer *renderer, int width, int height);
-  void SetWidth(int width);
-  void SetHeight(int height);
+  virtual void SetWidth(int width);
+  virtual void SetHeight(int height);
+  virtual void SetColor(SDL_Color color);
   void SetTopLeftPosition(int top_left_x, int top_left_y);
-  void SetColor(SDL_Color color);
   int GetHeight();
   int GetWidth();
   int GetTopLeftX();

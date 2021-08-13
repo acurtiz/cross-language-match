@@ -121,7 +121,9 @@ void InteractiveText::Render() {
 
   SDL_RenderFillRect(renderer_, &padding_rect);
 
-  text_->Render(top_left_x_ + text_padding_per_side_, top_left_y_ + text_padding_per_side_);
+  text_->SetTopLeftPosition(top_left_x_ + text_padding_per_side_,
+                            top_left_y_ + text_padding_per_side_);
+  text_->Render();
 
 }
 

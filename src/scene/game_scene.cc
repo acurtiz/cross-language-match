@@ -81,6 +81,12 @@ void GameScene::RunPreLoop() {
   // Next round button is just to the left of the submit button
   next_round_button_->SetTopLeftPosition(submit_button_->GetTopLeftX() - next_round_button_->GetWidth() - 10,
                                          submit_button_->GetTopLeftY());
+
+  // Correct or incorrect message should be rendered in the bottom middle
+  correct_text_->SetTopLeftPosition(screen_width_ / 2 - correct_text_->GetWidth() / 2,
+                                    screen_height_ - correct_text_->GetHeight() - 10);
+  incorrect_text_->SetTopLeftPosition(screen_width_ / 2 - incorrect_text_->GetWidth() / 2,
+                                      screen_height_ - incorrect_text_->GetHeight() - 10);
 }
 
 void GameScene::RunPostLoop() {
@@ -168,20 +174,8 @@ void GameScene::RunSingleIterationLoopBody() {
   SDL_SetRenderDrawColor(renderer_, background_color_.r, background_color_.g, background_color_.b, background_color_.a);
   SDL_RenderClear(renderer_);
 
-  // Render left column
-  int y = padding_individual_words_;
-  for (auto &left_word: *left_words_) {
-    left_word->SetTopLeftPosition(padding_word_columns_, y);
-    left_word->Render();
-    y += left_word->GetHeight() + padding_individual_words_;
-  }
-
-  // Render right column
-  y = padding_individual_words_;
-  for (auto &right_word: *right_words_) {
-    right_word->SetTopLeftPosition(screen_width_ - padding_word_columns_ - right_word->GetWidth(), y);
-    right_word->Render();
-    y += right_word->GetHeight() + padding_individual_words_;
+  for (auto &word: *left_and_right_words_) {
+    word->Render();
   }
 
   submit_button_->Render();
@@ -191,16 +185,13 @@ void GameScene::RunSingleIterationLoopBody() {
     next_round_button_->Render();
   }
 
-  // Render congratulations text in the middle of the bottom of the screen
   if (current_round_is_complete_) {
-    correct_text_->Render(screen_width_ / 2 - correct_text_->GetWidth() / 2,
-                          screen_height_ - correct_text_->GetHeight() - 10);
+    correct_text_->Render();
   }
 
   // Render incorrect message
   if (last_submission_was_incorrect_) {
-    incorrect_text_->Render(screen_width_ / 2 - incorrect_text_->GetWidth() / 2,
-                            screen_height_ - incorrect_text_->GetHeight() - 10);
+    incorrect_text_->Render();
   }
 
   SDL_RenderPresent(renderer_);
@@ -242,6 +233,18 @@ void GameScene::PrepareCurrentWords() {
   Shuffle(right_words_);
 
   left_and_right_words_ = GetUnifiedVector(left_words_, right_words_);
+
+  // Set the position of the words in both columns
+  int y = padding_individual_words_;
+  for (auto &left_word: *left_words_) {
+    left_word->SetTopLeftPosition(padding_word_columns_, y);
+    y += left_word->GetHeight() + padding_individual_words_;
+  }
+  y = padding_individual_words_;
+  for (auto &right_word: *right_words_) {
+    right_word->SetTopLeftPosition(screen_width_ - padding_word_columns_ - right_word->GetWidth(), y);
+    y += right_word->GetHeight() + padding_individual_words_;
+  }
 
 }
 

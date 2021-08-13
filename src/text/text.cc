@@ -5,7 +5,8 @@
 
 namespace cross_language_match {
 
-Text::Text(SDL_Renderer *renderer, TTF_Font *font, SDL_Color color, std::string text, int wrap_length_pixels) {
+Text::Text(SDL_Renderer *renderer, TTF_Font *font, SDL_Color color, std::string text, int wrap_length_pixels)
+    : Rectangle(renderer) {
 
   renderer_ = renderer;
   text_string_ = text;
@@ -22,15 +23,15 @@ Text::Text(SDL_Renderer *renderer, TTF_Font *font, SDL_Color color, std::string 
     );
   }
 
-  texture_ = SDL_CreateTextureFromSurface(renderer_, text_surface);
+  texture_ = SDL_CreateTextureFromSurface(renderer, text_surface);
   if (texture_ == nullptr) {
     throw std::runtime_error(
         boost::str(boost::format("Unable to create texture from surface, error: %1%\n") % SDL_GetError())
     );
   }
 
-  width_ = text_surface->w;
-  height_ = text_surface->h;
+  Rectangle::SetWidth(text_surface->w);
+  Rectangle::SetHeight(text_surface->h);
 
   SDL_FreeSurface(text_surface);
 
@@ -50,23 +51,27 @@ void Text::Free() {
 
 }
 
-void Text::Render(int x, int y) {
+void Text::Render() {
 
-  SDL_Rect dest_rect = {x, y, width_, height_};
+  SDL_Rect dest_rect = {GetTopLeftX(), GetTopLeftY(), GetWidth(), GetHeight()};
   SDL_RenderCopy(renderer_, texture_, nullptr, &dest_rect);
 
 }
 
-int Text::GetWidth() const {
-  return width_;
-}
-
-int Text::GetHeight() const {
-  return height_;
-}
-
 std::string Text::GetString() const {
   return text_string_;
+}
+
+void Text::SetHeight(int height) {
+  throw std::runtime_error("Mutating height on text object not supported; ignoring\n");
+}
+
+void Text::SetWidth(int width) {
+  throw std::runtime_error("Mutating width on text object not supported; ignoring\n");
+}
+
+void Text::SetColor(SDL_Color color) {
+  throw std::runtime_error("Mutating color on text object not supported; ignoring\n");
 }
 
 }

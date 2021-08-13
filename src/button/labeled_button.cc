@@ -27,7 +27,8 @@ void LabeledButton::Render() {
   int label_top_left_y = GetTopLeftY() + extra_height / 2;
 
   Button::Render();
-  label_->Render(label_top_left_x, label_top_left_y);
+  label_->SetTopLeftPosition(label_top_left_x, label_top_left_y);
+  label_->Render();
 }
 
 }

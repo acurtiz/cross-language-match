@@ -66,6 +66,10 @@ void HelpScene::RunPreLoop() {
   return_button_->SetTopLeftPosition(screen_width_ / 2 - return_button_->GetWidth() / 2,
                                      screen_height_ - return_button_->GetHeight() - 100);
 
+  // Set the explanation text position to be in the top middle
+  explanation_text_->SetTopLeftPosition(screen_width_ / 2 - explanation_text_->GetWidth() / 2,
+                                        explanation_text_->GetHeight() + 100);
+
 }
 
 void HelpScene::RunPostLoop() {
@@ -98,13 +102,8 @@ void HelpScene::RunSingleIterationLoopBody() {
 
   SDL_SetRenderDrawColor(renderer_, background_color_.r, background_color_.g, background_color_.b, background_color_.a);
   SDL_RenderClear(renderer_);
-
   return_button_->Render();
-
-  // Render the game title in the top middle
-  explanation_text_->Render(screen_width_ / 2 - explanation_text_->GetWidth() / 2,
-                            explanation_text_->GetHeight() + 100);
-
+  explanation_text_->Render();
   SDL_RenderPresent(renderer_);
 
 }

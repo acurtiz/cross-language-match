@@ -31,9 +31,9 @@ EM_JS(
       input.type = 'file';
       input.onchange = e => {
 
-        var fileBlob = e.target.files[0];
+        var file_blob = e.target.files[0];
 
-        if (fileBlob.length == 0) {
+        if (file_blob.length == 0) {
           return;
         }
 
@@ -44,11 +44,10 @@ EM_JS(
           var data_str = reader.result;
           Module.ccall('persist_file', null,["string"],[data_str]);
           // Populate the passed in filename variable
-          var lengthBytes = lengthBytesUTF8(fileBlob.name) + 1;
-          stringToUTF8(fileBlob.name, loaded_file_name, lengthBytes);
+          stringToUTF8(file_blob.name, loaded_file_name, lengthBytesUTF8(file_blob.name) + 1);
         };
 
-        reader.readAsText(fileBlob);
+        reader.readAsText(file_blob);
 
       };
 
@@ -127,12 +126,15 @@ void LoadScene::RunPreLoop() {
 
   // Set begin button to be just below the load button
   begin_button_->SetTopLeftPosition(screen_width_ / 2 - begin_button_->GetWidth() / 2,
-                                    load_button_->GetTopLeftY() + load_button_->GetHeight() + begin_button_->GetHeight()
-                                        + 150);
+                                    load_button_->GetTopLeftY() + load_button_->GetHeight() + 10);
 
   // Set the return button to be in the bottom right
   return_button_->SetTopLeftPosition(screen_width_ - 10 - return_button_->GetWidth(),
                                      screen_height_ - return_button_->GetHeight() - 10);
+
+  // Set the explanation to be in the top middle
+  explanation_text_->SetTopLeftPosition(screen_width_ / 2 - explanation_text_->GetWidth() / 2,
+                                        explanation_text_->GetHeight() + 100);
 
 }
 
@@ -180,6 +182,8 @@ void LoadScene::ClearErrorMessage() {
 void LoadScene::SetErrorMessage(std::string error_message) {
   ClearErrorMessage();
   error_text_ = new Text(renderer_, small_font_, small_font_color_, error_message, 1000);
+  error_text_->SetTopLeftPosition(screen_width_ / 2 - error_text_->GetWidth() / 2,
+                                  screen_height_ - wide_button_height_ - 100);
 }
 
 void LoadScene::HandleBeginEvent(SDL_Event &event) {
@@ -268,29 +272,25 @@ bool LoadScene::IsFileReadyForGame() {
   return IsFileLoaded() && loaded_file_has_been_processed_ && error_text_ == nullptr;
 }
 
-void LoadScene::RunSingleIterationLoopBody() {
+bool LoadScene::IsErrorMessageSet() {
+  return error_text_ != nullptr;
+}
 
-  if (IsFileLoaded()) {
-    printf("Loaded file name: %s\n", loaded_file_name_);
-  }
+void LoadScene::RunSingleIterationLoopBody() {
 
   SDL_SetRenderDrawColor(renderer_, background_color_.r, background_color_.g, background_color_.b, background_color_.a);
   SDL_RenderClear(renderer_);
 
   load_button_->Render();
   return_button_->Render();
+  explanation_text_->Render();
 
   if (IsFileReadyForGame()) {
     begin_button_->Render();
   }
 
-  // Render the explanation in the top middle
-  explanation_text_->Render(screen_width_ / 2 - explanation_text_->GetWidth() / 2,
-                            explanation_text_->GetHeight() + 100);
-
-  if (error_text_ != nullptr) {
-    error_text_->Render(screen_width_ / 2 - error_text_->GetWidth() / 2,
-                        screen_height_ - wide_button_height_ - 100);
+  if (IsErrorMessageSet()) {
+    error_text_->Render();
   }
 
   SDL_RenderPresent(renderer_);

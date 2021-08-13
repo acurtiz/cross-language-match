@@ -32,6 +32,7 @@ class LoadScene : public Scene {
   void HandleBeginEvent(SDL_Event &event);
   void SetErrorMessage(std::string error_message);
   void ClearErrorMessage();
+  bool IsErrorMessageSet();
   bool IsFileLoaded();
   bool IsFileReadyForGame();
   void AllocateLoadedFileName();

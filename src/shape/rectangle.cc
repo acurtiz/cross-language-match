@@ -3,6 +3,10 @@
 
 namespace cross_language_match {
 
+Rectangle::Rectangle(SDL_Renderer *renderer) {
+  renderer_ = renderer;
+}
+
 Rectangle::Rectangle(SDL_Renderer *renderer, int width, int height) {
   renderer_ = renderer;
   width_ = width;

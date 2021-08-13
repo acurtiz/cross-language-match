@@ -70,6 +70,10 @@ void StartScene::RunPreLoop() {
   // Render the help button above the start button, with 100 pixel gap
   help_button_->SetTopLeftPosition(screen_width_ / 2 - help_button_->GetWidth() / 2,
                                    start_button_->GetTopLeftY() - start_button_->GetHeight() - 100);
+
+  // Render the game title in the top middle
+  title_text_->SetTopLeftPosition(screen_width_ / 2 - title_text_->GetWidth() / 2,
+                                  title_text_->GetHeight() + 100);
 }
 
 void StartScene::RunPostLoop() {
@@ -123,14 +127,9 @@ void StartScene::RunSingleIterationLoopBody() {
 
   SDL_SetRenderDrawColor(renderer_, background_color_.r, background_color_.g, background_color_.b, background_color_.a);
   SDL_RenderClear(renderer_);
-
   start_button_->Render();
   help_button_->Render();
-
-  // Render the game title in the top middle
-  title_text_->Render(screen_width_ / 2 - title_text_->GetWidth() / 2,
-                      title_text_->GetHeight() + 100);
-
+  title_text_->Render();
   SDL_RenderPresent(renderer_);
 
 }
