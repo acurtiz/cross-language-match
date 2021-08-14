@@ -3,53 +3,40 @@
 
 namespace cross_language_match {
 
-InteractiveText::InteractiveText(SDL_Renderer *renderer, Text *text, InteractiveTextGroup group) {
+InteractiveText::InteractiveText(SDL_Renderer *renderer, Text *text, InteractiveTextGroup group)
+    : Rectangle(renderer) {
+
   renderer_ = renderer;
   text_ = text;
   linked_interactive_text_ = nullptr;
   is_highlighted_ = false;
-  top_left_x_ = 0;
-  top_left_y_ = 0;
-  width_ = text_->GetWidth() + text_padding_per_side_ * 2;
-  height_ = text_->GetHeight() + text_padding_per_side_ * 2;
   group_ = group;
-}
 
-InteractiveText::~InteractiveText() {
-  return;
+  Rectangle::SetTopLeftPosition(0, 0);
+  Rectangle::SetWidth(text_->GetWidth() + text_padding_per_side_ * 2);
+  Rectangle::SetHeight(text_->GetHeight() + text_padding_per_side_ * 2);
+
 }
 
 void InteractiveText::AddHighlight() {
-
-  printf("Adding highlight on %s\n", this->GetText()->GetString().c_str());
   is_highlighted_ = true;
-
 }
 
 void InteractiveText::RemoveHighlight() {
-
-  printf("Removing highlight on %s\n", this->GetText()->GetString().c_str());
   is_highlighted_ = false;
-
 }
 
 void InteractiveText::AddLink(InteractiveText *other) {
 
   if (other == nullptr) {
-    printf("AddLink called with nullptr argument, not taking action\n");
     return;
   }
 
   if (linked_interactive_text_ != nullptr) {
-    printf("AddLink called but there is already a linked object; not taking action\n");
     return;
   }
 
   linked_interactive_text_ = other;
-
-  printf("Linking object (%s) with object (%s)\n",
-         this->GetText()->GetString().c_str(),
-         this->GetLink()->GetText()->GetString().c_str());
 
 }
 
@@ -59,10 +46,6 @@ void InteractiveText::RemoveLink() {
     return;
   }
 
-  printf("Removing link between (%s) and (%s)",
-         this->GetText()->GetString().c_str(),
-         this->GetLink()->GetText()->GetString().c_str());
-
   linked_interactive_text_ = nullptr;
 
 }
@@ -71,14 +54,7 @@ InteractiveText *InteractiveText::GetLink() {
   return linked_interactive_text_;
 }
 
-void InteractiveText::SetTopLeftPosition(int x, int y) {
-  top_left_x_ = x;
-  top_left_y_ = y;
-}
-
 void InteractiveText::Render() {
-
-  SDL_Rect padding_rect = {top_left_x_, top_left_y_, width_, height_};
 
   // The line should be drawn from the middle of the right edge of the *left* word to the middle of the left edge
   // of the right word
@@ -99,31 +75,38 @@ void InteractiveText::Render() {
                            interactive_line_color_.b,
                            interactive_line_color_.a);
     SDL_RenderDrawLine(renderer_,
-                       left_interactive_text->top_left_x_ + left_interactive_text->width_,
-                       left_interactive_text->top_left_y_ + left_interactive_text->height_ / 2,
-                       right_interactive_text->top_left_x_,
-                       right_interactive_text->top_left_y_ + right_interactive_text->height_ / 2);
+                       left_interactive_text->GetTopLeftX() + left_interactive_text->GetWidth(),
+                       left_interactive_text->GetTopLeftY() + left_interactive_text->GetHeight() / 2,
+                       right_interactive_text->GetTopLeftX(),
+                       right_interactive_text->GetTopLeftY() + right_interactive_text->GetHeight() / 2);
   }
 
   if (is_highlighted_) {
-    SDL_SetRenderDrawColor(renderer_,
-                           interactive_text_highlight_color_.r,
-                           interactive_text_highlight_color_.g,
-                           interactive_text_highlight_color_.b,
-                           interactive_text_highlight_color_.a);
+    SetColor({
+                 interactive_text_highlight_color_.r,
+                 interactive_text_highlight_color_.g,
+                 interactive_text_highlight_color_.b,
+                 interactive_text_highlight_color_.a
+             });
   } else {
-    SDL_SetRenderDrawColor(renderer_,
-                           interactive_text_non_highlight_color_.r,
-                           interactive_text_non_highlight_color_.b,
-                           interactive_text_non_highlight_color_.g,
-                           interactive_text_non_highlight_color_.a);
+    SetColor({
+                 interactive_text_non_highlight_color_.r,
+                 interactive_text_non_highlight_color_.b,
+                 interactive_text_non_highlight_color_.g,
+                 interactive_text_non_highlight_color_.a
+             });
   }
 
-  SDL_RenderFillRect(renderer_, &padding_rect);
-
-  text_->SetTopLeftPosition(top_left_x_ + text_padding_per_side_,
-                            top_left_y_ + text_padding_per_side_);
+  Rectangle::Render();
   text_->Render();
+
+}
+
+void InteractiveText::SetTopLeftPosition(int top_left_x, int top_left_y) {
+
+  Rectangle::SetTopLeftPosition(top_left_x, top_left_y);
+  text_->SetTopLeftPosition(GetTopLeftX() + text_padding_per_side_,
+                            GetTopLeftY() + text_padding_per_side_);
 
 }
 
@@ -133,15 +116,7 @@ void InteractiveText::HandleEvent(SDL_Event *event, std::vector<InteractiveText 
     return;
   }
 
-  int mouse_x, mouse_y;
-  SDL_GetMouseState(&mouse_x, &mouse_y);
-
-  bool mouse_inside_button = (mouse_x >= top_left_x_)
-      && (mouse_x <= top_left_x_ + width_)
-      && (mouse_y >= top_left_y_)
-      && (mouse_y <= top_left_y_ + height_);
-
-  if (mouse_inside_button) {
+  if (IsMouseInside()) {
 
     switch (event->type) {
 
@@ -254,14 +229,6 @@ InteractiveText *InteractiveText::GetHighlightedOtherFromDifferentGroup(std::vec
 
   return nullptr;
 
-}
-
-int InteractiveText::GetWidth() {
-  return width_;
-}
-
-int InteractiveText::GetHeight() {
-  return height_;
 }
 
 int InteractiveText::GetPaddingPerSide() {

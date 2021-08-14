@@ -13,7 +13,7 @@ class Rectangle {
   virtual void SetWidth(int width);
   virtual void SetHeight(int height);
   virtual void SetColor(SDL_Color color);
-  void SetTopLeftPosition(int top_left_x, int top_left_y);
+  virtual void SetTopLeftPosition(int top_left_x, int top_left_y);
   int GetHeight();
   int GetWidth();
   int GetTopLeftX();
