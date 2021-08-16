@@ -1,0 +1,38 @@
+#include <cmath>
+#include "shape/circle_with_x.h"
+
+namespace cross_language_match {
+
+CircleWithX::CircleWithX(SDL_Renderer *renderer) : Circle(renderer) {
+  renderer_ = renderer;
+}
+
+void CircleWithX::Render() {
+
+  Circle::Render();
+
+  // We only render the X inside if a mouse is in the circle
+  if (!IsMouseInside()) {
+    return;
+  }
+
+  int a = (int) sqrt(pow(GetRadius(), 2) / 2);
+
+  int top_left_x = GetCenterX() - a;
+  int top_left_y = GetCenterY() + a;
+
+  int bottom_right_x = GetCenterX() + a;
+  int bottom_right_y = GetCenterY() - a;
+
+  int top_right_x = GetCenterX() + a;
+  int top_right_y = GetCenterY() + a;
+
+  int bottom_left_x = GetCenterX() - a;
+  int bottom_left_y = GetCenterY() - a;
+
+  SDL_RenderDrawLine(renderer_, top_left_x, top_left_y, bottom_right_x, bottom_right_y);
+  SDL_RenderDrawLine(renderer_, bottom_left_x, bottom_left_y, top_right_x, top_right_y);
+
+}
+
+}

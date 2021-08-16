@@ -3,15 +3,11 @@
 
 namespace cross_language_match {
 
-Rectangle::Rectangle(SDL_Renderer *renderer) {
-  renderer_ = renderer;
-}
+Rectangle::Rectangle(SDL_Renderer *renderer)
+    : renderer_(renderer), width_(0), height_(0), color_({0, 0, 0, 0xFF}), top_left_x_(0), top_left_y_(0) {}
 
-Rectangle::Rectangle(SDL_Renderer *renderer, int width, int height) {
-  renderer_ = renderer;
-  width_ = width;
-  height_ = height;
-}
+Rectangle::Rectangle(SDL_Renderer *renderer, int width, int height)
+    : renderer_(renderer), width_(width), height_(height), color_({0, 0, 0, 0xFF}), top_left_x_(0), top_left_y_(0) {}
 
 void Rectangle::SetTopLeftPosition(int top_left_x, int top_left_y) {
   top_left_x_ = top_left_x;

@@ -1,5 +1,7 @@
 #include <vector>
+#include <cmath>
 #include "text/interactive_text.h"
+#include "shape/circle_with_x.h"
 
 namespace cross_language_match {
 
@@ -56,6 +58,31 @@ InteractiveText *InteractiveText::GetLink() {
 
 void InteractiveText::Render() {
 
+  RenderLink();
+
+  if (is_highlighted_) {
+    Rectangle::SetColor({
+                            interactive_text_highlight_color_.r,
+                            interactive_text_highlight_color_.g,
+                            interactive_text_highlight_color_.b,
+                            interactive_text_highlight_color_.a
+                        });
+  } else {
+    Rectangle::SetColor({
+                            interactive_text_non_highlight_color_.r,
+                            interactive_text_non_highlight_color_.b,
+                            interactive_text_non_highlight_color_.g,
+                            interactive_text_non_highlight_color_.a
+                        });
+  }
+
+  Rectangle::Render();
+  text_->Render();
+
+}
+
+void InteractiveText::RenderLink() {
+
   // The line should be drawn from the middle of the right edge of the *left* word to the middle of the left edge
   // of the right word
   InteractiveText *left_interactive_text;
@@ -69,37 +96,70 @@ void InteractiveText::Render() {
   }
 
   if (linked_interactive_text_ != nullptr) {
+
     SDL_SetRenderDrawColor(renderer_,
                            interactive_line_color_.r,
                            interactive_line_color_.g,
                            interactive_line_color_.b,
                            interactive_line_color_.a);
+
+    // We calculate the slope of the line from the left interactive text object to the right interactive text object
+    double y_delta = (right_interactive_text->GetTopLeftY() + (double) right_interactive_text->GetHeight() / 2)
+        - (left_interactive_text->GetTopLeftY() + (double) left_interactive_text->GetHeight() / 2);
+    double x_delta = (right_interactive_text->GetTopLeftX())
+        - (left_interactive_text->GetTopLeftX() + left_interactive_text->GetWidth());
+    double slope = y_delta / x_delta;
+
+    // For a moment we assume the origin is the right, middle side of the *left* interactive text object
+    // We fix the center of the circle to be 30 pixels along from on the X-axis along that line, and we
+    // calculate what the corresponding y coordinate should be to be along that line. This will be the
+    // center of the circle we draw
+    int circle_center_x = 30;
+    int circle_center_y = (int) (slope * circle_center_x);
+
+    // We had assumed the origin wasn't the top left of the screen, so we must translate since to SDL, it is
+    int offset_x = left_interactive_text->GetTopLeftX() + left_interactive_text->GetWidth();
+    int offset_y = left_interactive_text->GetTopLeftY() + left_interactive_text->GetHeight() / 2;
+
+    int circle_radius = 10;
+
+    // We don't want to draw our linking line through the circle; we want to have a line from the interactive text
+    // object until it hits the circle, and then another line to continue on the same slope after the circle; thus,
+    // we must calculate what those intersecting points are on the left and right side of the circle
+    // In order to do that, we'll actually calculate as accurately as we can, but we could use a heuristic to simplify
+    // if necessary in the future.
+    int circle_x_left_side =
+        (int) sqrt((pow(sqrt(pow(circle_center_x, 2) + pow(circle_center_y, 2)) - circle_radius, 2)
+            - pow(circle_center_y, 2) / pow(circle_center_x, 2)) / (1 + 1 / pow(circle_center_x, 2)));
+    int circle_y_left_side = circle_x_left_side * circle_center_y / circle_center_x;
+    int circle_x_right_side = circle_center_x + (circle_center_x - circle_x_left_side);
+    int circle_y_right_side = circle_center_y + (circle_center_y - circle_y_left_side);
+
+    // Draw a line from the left interactive text to the left side of the circle
     SDL_RenderDrawLine(renderer_,
                        left_interactive_text->GetTopLeftX() + left_interactive_text->GetWidth(),
                        left_interactive_text->GetTopLeftY() + left_interactive_text->GetHeight() / 2,
+                       offset_x + circle_x_left_side,
+                       offset_y + circle_y_left_side);
+
+    // Draw the circle
+    CircleWithX circle = CircleWithX(renderer_);
+    circle.SetRadius(circle_radius);
+    circle.SetCenter(offset_x + circle_center_x, offset_y + circle_center_y);
+    circle.SetColor({interactive_line_color_.r,
+                     interactive_line_color_.g,
+                     interactive_line_color_.b,
+                     interactive_line_color_.a});
+    circle.Render();
+
+    // Draw a line from the right side of the circle to the right interactive text
+    SDL_RenderDrawLine(renderer_,
+                       offset_x + circle_x_right_side,
+                       offset_y + circle_y_right_side,
                        right_interactive_text->GetTopLeftX(),
                        right_interactive_text->GetTopLeftY() + right_interactive_text->GetHeight() / 2);
+
   }
-
-  if (is_highlighted_) {
-    SetColor({
-                 interactive_text_highlight_color_.r,
-                 interactive_text_highlight_color_.g,
-                 interactive_text_highlight_color_.b,
-                 interactive_text_highlight_color_.a
-             });
-  } else {
-    SetColor({
-                 interactive_text_non_highlight_color_.r,
-                 interactive_text_non_highlight_color_.b,
-                 interactive_text_non_highlight_color_.g,
-                 interactive_text_non_highlight_color_.a
-             });
-  }
-
-  Rectangle::Render();
-  text_->Render();
-
 }
 
 void InteractiveText::SetTopLeftPosition(int top_left_x, int top_left_y) {

@@ -23,11 +23,11 @@ class Rectangle {
   virtual void Render();
 
  private:
-  int width_ = 0;
-  int height_ = 0;
-  int top_left_x_ = 0;
-  int top_left_y_ = 0;
-  SDL_Color color_ = {0, 0, 0, 0xFF};
+  int width_;
+  int height_;
+  int top_left_x_;
+  int top_left_y_;
+  SDL_Color color_;
   SDL_Renderer *renderer_;
 
 };

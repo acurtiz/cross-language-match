@@ -35,6 +35,7 @@ class InteractiveText : public Rectangle {
   InteractiveTextGroup group_;
   InteractiveText *GetHighlightedOtherFromSameGroup(std::vector<InteractiveText *> all_text);
   InteractiveText *GetHighlightedOtherFromDifferentGroup(std::vector<InteractiveText *> all_text);
+  void RenderLink();
 
   SDL_Color interactive_line_color_ = {0x48, 0x3C, 0x32, 0xFF};
   SDL_Color interactive_text_highlight_color_ = {0x4E, 0xC3, 0x3D, 0xFF};
