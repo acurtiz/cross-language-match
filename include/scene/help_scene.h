@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL_ttf.h>
 #include "button/button.h"
+#include "button/button_event.h"
 #include "text/text.h"
 #include "scene/scene.h"
 

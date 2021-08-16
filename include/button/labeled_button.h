@@ -9,7 +9,7 @@ namespace cross_language_match {
 class LabeledButton : public Button {
  public:
   LabeledButton(Button button, Text *label);
-  void Render();
+  void Render() override;
  private:
   Text *label_;
 };

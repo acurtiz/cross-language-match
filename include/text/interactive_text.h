@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <vector>
 #include "text.h"
+#include "shape/circle_with_x.h"
 
 #ifndef CROSSLANGUAGEMATCH_INCLUDE_INTERACTIVE_TEXT_H_
 #define CROSSLANGUAGEMATCH_INCLUDE_INTERACTIVE_TEXT_H_
@@ -35,7 +36,16 @@ class InteractiveText : public Rectangle {
   InteractiveTextGroup group_;
   InteractiveText *GetHighlightedOtherFromSameGroup(std::vector<InteractiveText *> all_text);
   InteractiveText *GetHighlightedOtherFromDifferentGroup(std::vector<InteractiveText *> all_text);
-  void RenderLink();
+
+  CircleWithX *link_cancellation_circle_ = nullptr;
+  int line_one_x1_ = 0;
+  int line_one_y1_ = 0;
+  int line_one_x2_ = 0;
+  int line_one_y2_ = 0;
+  int line_two_x1_ = 0;
+  int line_two_y1_ = 0;
+  int line_two_x2_ = 0;
+  int line_two_y2_ = 0;
 
   SDL_Color interactive_line_color_ = {0x48, 0x3C, 0x32, 0xFF};
   SDL_Color interactive_text_highlight_color_ = {0x4E, 0xC3, 0x3D, 0xFF};

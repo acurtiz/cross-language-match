@@ -35,4 +35,26 @@ void CircleWithX::Render() {
 
 }
 
+ButtonEvent CircleWithX::HandleEvent(SDL_Event *event) {
+
+  if (event->type != SDL_MOUSEBUTTONUP) {
+    return NONE;
+  }
+
+  if (IsMouseInside()) {
+
+    switch (event->type) {
+      case SDL_MOUSEBUTTONUP:
+        printf("Button up detected\n");
+        return PRESSED;
+      default:
+        printf("Unrecognized mouse event type: %d", event->type);
+        return NONE;
+    }
+  }
+
+  return NONE;
+
+}
+
 }

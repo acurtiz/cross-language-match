@@ -3,6 +3,7 @@
 #include "word_loader/file_word_loader.h"
 #include "text/text.h"
 #include "button/button.h"
+#include "button/button_event.h"
 #include "scene/scene.h"
 
 #ifndef CROSSLANGUAGEMATCH_INCLUDE_SCENE_LOAD_SCENE_H_
