@@ -53,12 +53,12 @@ void StartScene::RunPreLoop() {
 
   start_text_ = new Text(renderer_, button_font_, start_text_color_, "Start the game");
   start_button_ =
-      new LabeledButton(Button(Rectangle(renderer_, button_width_, button_height_)), start_text_);
+      new LabeledButton(RectangularButton(Rectangle(renderer_, button_width_, button_height_)), start_text_);
   start_button_event_ = NONE;
 
   help_text_ = new Text(renderer_, button_font_, help_text_color_, "How to play");
   help_button_ =
-      new LabeledButton(Button(Rectangle(renderer_, button_width_, button_height_)), help_text_);
+      new LabeledButton(RectangularButton(Rectangle(renderer_, button_width_, button_height_)), help_text_);
   help_button_event_ = NONE;
 
   title_text_ = new Text(renderer_, title_font_, title_text_color_, "Cross Language Match");

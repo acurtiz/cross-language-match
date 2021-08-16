@@ -2,9 +2,8 @@
 
 namespace cross_language_match {
 
-LabeledButton::LabeledButton(Button button, Text *label) : Button(button) {
-  label_ = label;
-}
+LabeledButton::LabeledButton(RectangularButton button, Text *label)
+    : RectangularButton(button), label_(label) {}
 
 void LabeledButton::Render() {
 
@@ -26,7 +25,7 @@ void LabeledButton::Render() {
   int label_top_left_x = GetTopLeftX() + extra_width / 2;
   int label_top_left_y = GetTopLeftY() + extra_height / 2;
 
-  Button::Render();
+  RectangularButton::Render();
   label_->SetTopLeftPosition(label_top_left_x, label_top_left_y);
   label_->Render();
 }

@@ -1,7 +1,7 @@
 #include <string>
 #include <map>
 #include <SDL_ttf.h>
-#include "button/button.h"
+#include "button/rectangular_button.h"
 #include "button/button_event.h"
 #include "scene.h"
 #include "text/interactive_text.h"
@@ -45,11 +45,11 @@ class GameScene : public Scene {
   Text *correct_text_ = nullptr;
 
   Text *submit_text_ = nullptr;
-  Button *submit_button_ = nullptr;
+  RectangularButton *submit_button_ = nullptr;
   Text *next_round_text_ = nullptr;
-  Button *next_round_button_ = nullptr;
+  RectangularButton *next_round_button_ = nullptr;
   Text *return_text_ = nullptr;
-  Button *return_button_ = nullptr;
+  RectangularButton *return_button_ = nullptr;
 
   ButtonEvent submit_button_event_ = NONE;
   ButtonEvent next_round_button_event_ = NONE;

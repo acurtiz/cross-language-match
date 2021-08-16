@@ -1,12 +1,12 @@
-#include "button/button.h"
+#include "button/rectangular_button.h"
 
 namespace cross_language_match {
 
-Button::Button(Rectangle rectangle) : Rectangle(rectangle) {
+RectangularButton::RectangularButton(Rectangle rectangle) : Rectangle(rectangle) {
   SetColor(color_default_);
 }
 
-ButtonEvent Button::HandleEvent(SDL_Event *event) {
+ButtonEvent RectangularButton::HandleEvent(SDL_Event *event) {
 
   if (!(event->type == SDL_MOUSEMOTION || event->type == SDL_MOUSEBUTTONDOWN || event->type == SDL_MOUSEBUTTONUP)) {
     return NONE;
@@ -35,7 +35,7 @@ ButtonEvent Button::HandleEvent(SDL_Event *event) {
 
 }
 
-void Button::Render() {
+void RectangularButton::Render() {
   Rectangle::Render();
 }
 

@@ -1,6 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL_ttf.h>
-#include "button/button.h"
+#include "button/rectangular_button.h"
 #include "button/button_event.h"
 #include "text/text.h"
 #include "scene/scene.h"
@@ -31,7 +31,7 @@ class HelpScene : public Scene {
   TTF_Font *return_button_font_ = nullptr;
   SDL_Color return_text_color_ = {0, 0, 0};
 
-  Button *return_button_ = nullptr;
+  RectangularButton *return_button_ = nullptr;
   ButtonEvent return_button_event_ = NONE;
 
   const int button_width_ = 400;

@@ -1,13 +1,12 @@
 #include <cmath>
-#include "shape/circle_with_x.h"
+#include "button/cancellation_circle_button.h"
 
 namespace cross_language_match {
 
-CircleWithX::CircleWithX(SDL_Renderer *renderer) : Circle(renderer) {
-  renderer_ = renderer;
-}
+CancellationCircleButton::CancellationCircleButton(SDL_Renderer *renderer)
+    : Circle(renderer), renderer_(renderer) {}
 
-void CircleWithX::Render() {
+void CancellationCircleButton::Render() {
 
   Circle::Render();
 
@@ -35,7 +34,7 @@ void CircleWithX::Render() {
 
 }
 
-ButtonEvent CircleWithX::HandleEvent(SDL_Event *event) {
+ButtonEvent CancellationCircleButton::HandleEvent(SDL_Event *event) {
 
   if (event->type != SDL_MOUSEBUTTONUP) {
     return NONE;
@@ -45,7 +44,7 @@ ButtonEvent CircleWithX::HandleEvent(SDL_Event *event) {
 
     switch (event->type) {
       case SDL_MOUSEBUTTONUP:
-        printf("Button up detected\n");
+        printf("RectangularButton up detected\n");
         return PRESSED;
       default:
         printf("Unrecognized mouse event type: %d", event->type);

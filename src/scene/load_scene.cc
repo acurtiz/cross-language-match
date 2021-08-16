@@ -4,7 +4,7 @@
 #include <boost/format.hpp>
 #include "scene/load_scene.h"
 #include "button/labeled_button.h"
-#include "button/button.h"
+#include "button/rectangular_button.h"
 #include "scene/game_scene.h"
 #include "word_loader/file_word_loader.h"
 #include <emscripten.h>
@@ -102,17 +102,18 @@ void LoadScene::RunPreLoop() {
 
   load_text_ = new Text(renderer_, button_font_, button_text_color_, "Load File");
   load_button_ =
-      new LabeledButton(Button(Rectangle(renderer_, wide_button_width_, wide_button_height_)), load_text_);
+      new LabeledButton(RectangularButton(Rectangle(renderer_, wide_button_width_, wide_button_height_)), load_text_);
   load_button_event_ = NONE;
 
   begin_text_ = new Text(renderer_, button_font_, button_text_color_, "Begin");
   begin_button_ =
-      new LabeledButton(Button(Rectangle(renderer_, wide_button_width_, wide_button_height_)), begin_text_);
+      new LabeledButton(RectangularButton(Rectangle(renderer_, wide_button_width_, wide_button_height_)), begin_text_);
   begin_button_event_ = NONE;
 
   return_button_text_ = new Text(renderer_, button_font_, button_text_color_, "Main Menu");
   return_button_ =
-      new LabeledButton(Button(Rectangle(renderer_, return_button_width_, return_button_height_)), return_button_text_);
+      new LabeledButton(RectangularButton(Rectangle(renderer_, return_button_width_, return_button_height_)),
+                        return_button_text_);
   return_button_event_ = NONE;
 
   explanation_text_ = new Text(renderer_,

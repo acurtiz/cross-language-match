@@ -1,4 +1,4 @@
-#include "button.h"
+#include "rectangular_button.h"
 #include "text/text.h"
 
 #ifndef CROSSLANGUAGEMATCH_INCLUDE_LABELED_BUTTON_H_
@@ -6,9 +6,9 @@
 
 namespace cross_language_match {
 
-class LabeledButton : public Button {
+class LabeledButton : public RectangularButton {
  public:
-  LabeledButton(Button button, Text *label);
+  LabeledButton(RectangularButton button, Text *label);
   void Render() override;
  private:
   Text *label_;

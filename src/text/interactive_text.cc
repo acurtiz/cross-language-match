@@ -1,24 +1,25 @@
 #include <vector>
 #include <cmath>
 #include "text/interactive_text.h"
-#include "shape/circle_with_x.h"
+#include "button/cancellation_circle_button.h"
 
 namespace cross_language_match {
 
 InteractiveText::InteractiveText(SDL_Renderer *renderer, Text *text, InteractiveTextGroup group)
-    : Rectangle(renderer) {
-
-  renderer_ = renderer;
-  text_ = text;
-  linked_interactive_text_ = nullptr;
-  is_highlighted_ = false;
-  group_ = group;
-
-  Rectangle::SetTopLeftPosition(0, 0);
-  Rectangle::SetWidth(text_->GetWidth() + text_padding_per_side_ * 2);
-  Rectangle::SetHeight(text_->GetHeight() + text_padding_per_side_ * 2);
-
-}
+    : Rectangle(renderer,
+                text->GetWidth() + text_padding_per_side_ * 2,
+                text->GetHeight() + text_padding_per_side_ * 2),
+      renderer_(renderer),
+      text_(text),
+      linked_interactive_text_(nullptr),
+      is_highlighted_(false),
+      group_(group),
+      interactive_line_color_({0x48, 0x3C, 0x32, 0xFF}),
+      interactive_text_highlight_color_({0x4E, 0xC3, 0x3D, 0xFF}),
+      interactive_text_non_highlight_color_({0x48, 0x3C, 0x32, 0xFF}),
+      link_cancellation_circle_(nullptr),
+      line_one_x1_(0), line_one_x2_(0), line_one_y1_(0), line_one_y2_(0),
+      line_two_x1_(0), line_two_x2_(0), line_two_y1_(0), line_two_y2_(0) {}
 
 void InteractiveText::AddHighlight() {
   is_highlighted_ = true;
@@ -94,7 +95,7 @@ void InteractiveText::AddLink(InteractiveText *other) {
   line_two_x2_ = right_interactive_text->GetTopLeftX();
   line_two_y2_ = right_interactive_text->GetTopLeftY() + right_interactive_text->GetHeight() / 2;
 
-  link_cancellation_circle_ = new CircleWithX(renderer_);
+  link_cancellation_circle_ = new CancellationCircleButton(renderer_);
   link_cancellation_circle_->SetRadius(circle_radius);
   link_cancellation_circle_->SetCenter(offset_x + circle_center_x, offset_y + circle_center_y);
   link_cancellation_circle_->SetColor({interactive_line_color_.r,

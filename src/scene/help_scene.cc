@@ -50,7 +50,7 @@ void HelpScene::RunPreLoop() {
 
   return_text_ = new Text(renderer_, return_button_font_, return_text_color_, "Return to Main Menu");
   return_button_ =
-      new LabeledButton(Button(Rectangle(renderer_, button_width_, button_height_)), return_text_);
+      new LabeledButton(RectangularButton(Rectangle(renderer_, button_width_, button_height_)), return_text_);
   return_button_event_ = NONE;
 
   explanation_text_ = new Text(renderer_,

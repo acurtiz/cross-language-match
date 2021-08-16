@@ -2,7 +2,7 @@
 #include "scene/game_scene.h"
 #include "word_loader/string_word_loader.h"
 #include "word_loader/file_word_loader.h"
-#include "button/button.h"
+#include "button/rectangular_button.h"
 #include "button/labeled_button.h"
 #include "boost/format.hpp"
 
@@ -59,13 +59,13 @@ void GameScene::RunPreLoop() {
 
   submit_text_ = new Text(renderer_, font_, button_text_color_, "Submit");
   submit_button_ =
-      new LabeledButton(Button(Rectangle(renderer_, button_width_, button_height_)), submit_text_);
+      new LabeledButton(RectangularButton(Rectangle(renderer_, button_width_, button_height_)), submit_text_);
   next_round_text_ = new Text(renderer_, font_, button_text_color_, "Next Round");
   next_round_button_ =
-      new LabeledButton(Button(Rectangle(renderer_, button_width_, button_height_)), next_round_text_);
+      new LabeledButton(RectangularButton(Rectangle(renderer_, button_width_, button_height_)), next_round_text_);
   return_text_ = new Text(renderer_, font_, button_text_color_, "Main Menu");
   return_button_ =
-      new LabeledButton(Button(Rectangle(renderer_, button_width_, button_height_)), return_text_);
+      new LabeledButton(RectangularButton(Rectangle(renderer_, button_width_, button_height_)), return_text_);
   submit_button_event_ = NONE;
   next_round_button_event_ = NONE;
   return_button_event_ = NONE;

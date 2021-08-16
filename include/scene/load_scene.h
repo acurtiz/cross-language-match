@@ -2,7 +2,7 @@
 #include <SDL_ttf.h>
 #include "word_loader/file_word_loader.h"
 #include "text/text.h"
-#include "button/button.h"
+#include "button/rectangular_button.h"
 #include "button/button_event.h"
 #include "scene/scene.h"
 
@@ -46,15 +46,15 @@ class LoadScene : public Scene {
   SDL_Color small_font_color_ = {0, 0, 0};
 
   Text *load_text_ = nullptr;
-  Button *load_button_ = nullptr;
+  RectangularButton *load_button_ = nullptr;
   ButtonEvent load_button_event_ = NONE;
 
   Text *begin_text_ = nullptr;
-  Button *begin_button_ = nullptr;
+  RectangularButton *begin_button_ = nullptr;
   ButtonEvent begin_button_event_ = NONE;
 
   Text *return_button_text_ = nullptr;
-  Button *return_button_ = nullptr;
+  RectangularButton *return_button_ = nullptr;
   ButtonEvent return_button_event_ = NONE;
 
   TTF_Font *button_font_ = nullptr;

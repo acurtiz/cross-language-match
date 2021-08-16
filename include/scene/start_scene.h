@@ -2,7 +2,7 @@
 #include <SDL_ttf.h>
 #include "scene/scene.h"
 #include "text/text.h"
-#include "button/button.h"
+#include "button/rectangular_button.h"
 #include "button/button_event.h"
 
 #ifndef CROSSLANGUAGEMATCH_INCLUDE_SCENE_START_SCENE_H_
@@ -31,7 +31,7 @@ class StartScene : public Scene {
   const int button_font_size_ = 28;
 
   Text *start_text_ = nullptr;
-  Button *start_button_ = nullptr;
+  RectangularButton *start_button_ = nullptr;
   ButtonEvent start_button_event_ = NONE;
 
   SDL_Color start_text_color_ = {0, 0, 0};
@@ -40,7 +40,7 @@ class StartScene : public Scene {
 
   Text *help_text_ = nullptr;
   SDL_Color help_text_color_ = {0, 0, 0};
-  Button *help_button_ = nullptr;
+  RectangularButton *help_button_ = nullptr;
   ButtonEvent help_button_event_ = NONE;
 
   const int screen_height_;
