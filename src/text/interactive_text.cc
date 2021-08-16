@@ -17,6 +17,7 @@ InteractiveText::InteractiveText(SDL_Renderer *renderer, Text *text, Interactive
       interactive_line_color_({0x48, 0x3C, 0x32, 0xFF}),
       interactive_text_highlight_color_({0x4E, 0xC3, 0x3D, 0xFF}),
       interactive_text_non_highlight_color_({0x48, 0x3C, 0x32, 0xFF}),
+      interactive_text_non_highlight_mouse_over_color_({0x22, 0x8B, 0x22, 0xFF}),
       link_cancellation_circle_(nullptr),
       line_one_x1_(0), line_one_x2_(0), line_one_y1_(0), line_one_y2_(0),
       line_two_x1_(0), line_two_x2_(0), line_two_y1_(0), line_two_y2_(0) {}
@@ -71,7 +72,7 @@ void InteractiveText::AddLink(InteractiveText *other) {
   int offset_x = left_interactive_text->GetTopLeftX() + left_interactive_text->GetWidth();
   int offset_y = left_interactive_text->GetTopLeftY() + left_interactive_text->GetHeight() / 2;
 
-  int circle_radius = 10;
+  int circle_radius = 15;
 
   // We don't want to draw our linking line through the circle; we want to have a line from the interactive text
   // object until it hits the circle, and then another line to continue on the same slope after the circle; thus,
@@ -123,7 +124,8 @@ InteractiveText *InteractiveText::GetLink() {
 
 void InteractiveText::Render() {
 
-  if (linked_interactive_text_ != nullptr) {
+  if (GetLink() != nullptr) {
+
     SDL_SetRenderDrawColor(renderer_,
                            interactive_line_color_.r,
                            interactive_line_color_.g,
@@ -132,20 +134,33 @@ void InteractiveText::Render() {
     SDL_RenderDrawLine(renderer_, line_one_x1_, line_one_y1_, line_one_x2_, line_one_y2_);
     link_cancellation_circle_->Render();
     SDL_RenderDrawLine(renderer_, line_two_x1_, line_two_y1_, line_two_x2_, line_two_y2_);
+
   }
 
   if (is_highlighted_) {
+
     Rectangle::SetColor({
                             interactive_text_highlight_color_.r,
                             interactive_text_highlight_color_.g,
                             interactive_text_highlight_color_.b,
                             interactive_text_highlight_color_.a
                         });
+
+  } else if (IsMouseInside() && GetLink() == nullptr) {
+
+    Rectangle::SetColor({
+                            interactive_text_non_highlight_mouse_over_color_.r,
+                            interactive_text_non_highlight_mouse_over_color_.g,
+                            interactive_text_non_highlight_mouse_over_color_.b,
+                            interactive_text_non_highlight_mouse_over_color_.a
+                        });
+
   } else {
+
     Rectangle::SetColor({
                             interactive_text_non_highlight_color_.r,
-                            interactive_text_non_highlight_color_.b,
                             interactive_text_non_highlight_color_.g,
+                            interactive_text_non_highlight_color_.b,
                             interactive_text_non_highlight_color_.a
                         });
   }

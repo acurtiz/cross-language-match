@@ -52,6 +52,7 @@ class InteractiveText : public Rectangle {
   SDL_Color interactive_line_color_;
   SDL_Color interactive_text_highlight_color_;
   SDL_Color interactive_text_non_highlight_color_;
+  SDL_Color interactive_text_non_highlight_mouse_over_color_;
 };
 
 }
