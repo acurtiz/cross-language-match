@@ -100,12 +100,14 @@ void LoadScene::RunPreLoop() {
   SDL_SetRenderDrawColor(renderer_, background_color_.r, background_color_.g, background_color_.b, background_color_.a);
   SDL_RenderClear(renderer_);
 
-  load_text_ = new Text(renderer_, button_font_, button_text_color_, "Load File");
+  std::string load_button_text = "Load File";
+  load_text_ = new Text(renderer_, button_font_, button_text_color_, load_button_text);
   load_button_ =
       new LabeledButton(RectangularButton(Rectangle(renderer_, wide_button_width_, wide_button_height_)), load_text_);
   load_button_event_ = NONE;
 
-  begin_text_ = new Text(renderer_, button_font_, button_text_color_, "Begin");
+  std::string begin_button_text = "Begin";
+  begin_text_ = new Text(renderer_, button_font_, button_text_color_, begin_button_text);
   begin_button_ =
       new LabeledButton(RectangularButton(Rectangle(renderer_, wide_button_width_, wide_button_height_)), begin_text_);
   begin_button_event_ = NONE;
@@ -119,8 +121,16 @@ void LoadScene::RunPreLoop() {
   explanation_text_ = new Text(renderer_,
                                small_font_,
                                small_font_color_,
-                               "Use the buttons outside the canvas to choose and then load the file, then click Begin.",
-                               1000);
+                               boost::str(boost::format(
+                                   "Click the '%1%' button and choose a file with comma-separated values "
+                                   "representing the word pairs, then click the '%2%' button to start.")
+                                              % load_button_text
+                                              % begin_button_text),
+                               1100);
+
+  // Set the explanation to be in the top middle
+  explanation_text_->SetTopLeftPosition(screen_width_ / 2 - explanation_text_->GetWidth() / 2,
+                                        explanation_text_->GetHeight() + 100);
 
   load_button_->SetTopLeftPosition(screen_width_ / 2 - load_button_->GetWidth() / 2,
                                    screen_height_ - load_button_->GetHeight() - 300);
@@ -132,10 +142,6 @@ void LoadScene::RunPreLoop() {
   // Set the return button to be in the bottom right
   return_button_->SetTopLeftPosition(screen_width_ - 10 - return_button_->GetWidth(),
                                      screen_height_ - return_button_->GetHeight() - 10);
-
-  // Set the explanation to be in the top middle
-  explanation_text_->SetTopLeftPosition(screen_width_ / 2 - explanation_text_->GetWidth() / 2,
-                                        explanation_text_->GetHeight() + 100);
 
 }
 

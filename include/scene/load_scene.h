@@ -43,7 +43,7 @@ class LoadScene : public Scene {
 
   TTF_Font *small_font_ = nullptr;
   const int small_font_size_ = 22;
-  SDL_Color small_font_color_ = {0, 0, 0};
+  SDL_Color small_font_color_ = {0xFF, 0xFF, 0xFF};
 
   Text *load_text_ = nullptr;
   RectangularButton *load_button_ = nullptr;

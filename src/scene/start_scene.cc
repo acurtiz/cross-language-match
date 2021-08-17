@@ -56,24 +56,25 @@ void StartScene::RunPreLoop() {
       new LabeledButton(RectangularButton(Rectangle(renderer_, button_width_, button_height_)), start_text_);
   start_button_event_ = NONE;
 
-  help_text_ = new Text(renderer_, button_font_, help_text_color_, "How to play");
+  help_text_ = new Text(renderer_, button_font_, help_text_color_, "Instructions");
   help_button_ =
       new LabeledButton(RectangularButton(Rectangle(renderer_, button_width_, button_height_)), help_text_);
   help_button_event_ = NONE;
 
   title_text_ = new Text(renderer_, title_font_, title_text_color_, "Cross Language Match");
 
-  // Render start button at the bottom middle of the screen
-  start_button_->SetTopLeftPosition(screen_width_ / 2 - start_button_->GetWidth() / 2,
-                                    screen_height_ - start_button_->GetHeight() - 100);
-
-  // Render the help button above the start button, with 100 pixel gap
-  help_button_->SetTopLeftPosition(screen_width_ / 2 - help_button_->GetWidth() / 2,
-                                   start_button_->GetTopLeftY() - start_button_->GetHeight() - 100);
-
   // Render the game title in the top middle
   title_text_->SetTopLeftPosition(screen_width_ / 2 - title_text_->GetWidth() / 2,
                                   title_text_->GetHeight() + 100);
+
+  // Render the help button below the title
+  help_button_->SetTopLeftPosition(screen_width_ / 2 - help_button_->GetWidth() / 2,
+                                   title_text_->GetTopLeftY() + title_text_->GetHeight() + 100);
+
+  // Render start button below the title
+  start_button_->SetTopLeftPosition(screen_width_ / 2 - start_button_->GetWidth() / 2,
+                                    help_button_->GetTopLeftY() + help_button_->GetHeight() + 10);
+
 }
 
 void StartScene::RunPostLoop() {

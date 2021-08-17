@@ -56,11 +56,10 @@ void HelpScene::RunPreLoop() {
   explanation_text_ = new Text(renderer_,
                                explanation_font_,
                                explanation_text_color_,
-                               "In this game, your goal is to "
-                               "match each word or phrase on the left column "
-                               "with the corresponding word or phrase in the right column. "
-                               "Left-click to select a word, and left click on the corresponding word to form a link. "
-                               "Right-click an existing word that is linked to remove that link.", 1000);
+                               "In this game, your goal is to match each word or phrase on the left column "
+                               "with the corresponding word or phrase in the right column. Left-click to highlight "
+                               "a word, and left click on the corresponding word from the other side to form a link. "
+                               "Click the X on the link in order to delete the link.", 1100);
 
   // Set submit button position to be in bottom middle
   return_button_->SetTopLeftPosition(screen_width_ / 2 - return_button_->GetWidth() / 2,
