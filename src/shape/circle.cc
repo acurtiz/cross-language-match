@@ -11,6 +11,9 @@ Circle::Circle(SDL_Renderer *renderer) : color_({0, 0, 0, 0xFF}),
 
 void Circle::Render() {
 
+  Uint8 already_set_r, already_set_g, already_set_b, already_set_a = 0;
+  SDL_GetRenderDrawColor(renderer_, &already_set_r, &already_set_g, &already_set_b, &already_set_a);
+
   SDL_SetRenderDrawColor(renderer_, color_.r, color_.g, color_.b, color_.a);
 
   const int diameter = (radius_ * 2);
@@ -45,6 +48,8 @@ void Circle::Render() {
       error += (tx - diameter);
     }
   }
+
+  SDL_SetRenderDrawColor(renderer_, already_set_r, already_set_g, already_set_b, already_set_a);
 
 }
 

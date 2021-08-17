@@ -9,7 +9,7 @@ class Circle {
   explicit Circle(SDL_Renderer *renderer);
   void SetRadius(int radius);
   void SetCenter(int x, int y);
-  void SetColor(SDL_Color color);
+  virtual void SetColor(SDL_Color color);
   virtual void Render();
   bool IsMouseInside();
   int GetRadius();

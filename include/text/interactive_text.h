@@ -25,7 +25,7 @@ class InteractiveText : public Rectangle {
   void Render() override;
   void SetTopLeftPosition(int top_left_x, int top_left_y) override;
   void HandleEvent(SDL_Event *event, std::vector<InteractiveText *> all_text);
-  Text *GetText();
+  const Text *GetText();
   InteractiveTextGroup GetGroup();
   static int GetPaddingPerSide();
 
@@ -36,7 +36,7 @@ class InteractiveText : public Rectangle {
   Text *text_;
   InteractiveText *linked_interactive_text_;
   bool is_highlighted_;
-  InteractiveTextGroup group_;
+  const InteractiveTextGroup group_;
   InteractiveText *GetHighlightedOtherFromSameGroup(std::vector<InteractiveText *> all_text);
   InteractiveText *GetHighlightedOtherFromDifferentGroup(std::vector<InteractiveText *> all_text);
   CancellationCircleButton *link_cancellation_circle_;
@@ -49,10 +49,10 @@ class InteractiveText : public Rectangle {
   int line_two_x2_;
   int line_two_y2_;
 
-  SDL_Color interactive_line_color_;
-  SDL_Color interactive_text_highlight_color_;
-  SDL_Color interactive_text_non_highlight_color_;
-  SDL_Color interactive_text_non_highlight_mouse_over_color_;
+  const SDL_Color interactive_line_color_;
+  const SDL_Color interactive_text_highlight_color_;
+  const SDL_Color interactive_text_non_highlight_color_;
+  const SDL_Color interactive_text_non_highlight_mouse_over_color_;
 };
 
 }

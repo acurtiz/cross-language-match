@@ -17,7 +17,7 @@ InteractiveText::InteractiveText(SDL_Renderer *renderer, Text *text, Interactive
       interactive_line_color_({0x48, 0x3C, 0x32, 0xFF}),
       interactive_text_highlight_color_({0x4E, 0xC3, 0x3D, 0xFF}),
       interactive_text_non_highlight_color_({0x48, 0x3C, 0x32, 0xFF}),
-      interactive_text_non_highlight_mouse_over_color_({0x22, 0x8B, 0x22, 0xFF}),
+      interactive_text_non_highlight_mouse_over_color_({0x1A, 0x56, 0x53, 0xFF}),
       link_cancellation_circle_(nullptr),
       line_one_x1_(0), line_one_x2_(0), line_one_y1_(0), line_one_y2_(0),
       line_two_x1_(0), line_two_x2_(0), line_two_y1_(0), line_two_y2_(0) {}
@@ -134,7 +134,6 @@ void InteractiveText::Render() {
     SDL_RenderDrawLine(renderer_, line_one_x1_, line_one_y1_, line_one_x2_, line_one_y2_);
     link_cancellation_circle_->Render();
     SDL_RenderDrawLine(renderer_, line_two_x1_, line_two_y1_, line_two_x2_, line_two_y2_);
-
   }
 
   if (is_highlighted_) {
@@ -224,7 +223,7 @@ void InteractiveText::HandleEvent(SDL_Event *event, std::vector<InteractiveText 
   }
 }
 
-Text *InteractiveText::GetText() {
+const Text *InteractiveText::GetText() {
   return text_;
 }
 

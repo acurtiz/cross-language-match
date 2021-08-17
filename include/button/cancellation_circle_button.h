@@ -14,9 +14,14 @@ class CancellationCircleButton : public Circle, public Button {
   explicit CancellationCircleButton(SDL_Renderer *renderer);
   void Render() override;
   ButtonEvent HandleEvent(SDL_Event *event) override;
+  void SetColor(SDL_Color color) override;
 
  private:
   SDL_Renderer *renderer_;
+  SDL_Color color_;
+  SDL_Color color_default_;
+  SDL_Color color_mouse_down_;
+  SDL_Color color_mouse_motion_;
 
 };
 
