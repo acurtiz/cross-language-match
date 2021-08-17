@@ -20,7 +20,10 @@ if (NOT DEFINED EMSCRIPTEN)
     message(FATAL ERROR "Error; must compile with Emscripten")
 endif ()
 
-include_directories(/Users/alex/Libraries/emsdk/upstream/emscripten/system/include)
+# Assumption is made that PATH or INCLUDE environment variables include the path to the 'emsdk' directory
+find_path(EMSCRIPTEN_INCLUDE_DIR emscripten.h REQUIRED)
+message("-- Identified Emscripten include directory as: ${EMSCRIPTEN_INCLUDE_DIR}")
+include_directories(${EMSCRIPTEN_INCLUDE_DIR})
 
 set(USE_FLAGS "-O3 -s USE_SDL=2 -s USE_SDL_TTF=2 -s USE_BOOST_HEADERS=1 --preload-file assets --use-preload-plugins -o output.js")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${USE_FLAGS}")
