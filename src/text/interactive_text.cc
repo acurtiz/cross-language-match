@@ -191,7 +191,7 @@ void InteractiveText::HandleEvent(SDL_Event *event, std::vector<InteractiveText 
 
   }
 
-  if (IsMouseInside() && event->type == SDL_MOUSEBUTTONUP && event->button.button == SDL_BUTTON_LEFT) {
+  if (IsMouseInside() && event->type == SDL_MOUSEBUTTONDOWN && event->button.button == SDL_BUTTON_LEFT) {
 
     if (GetLink() != nullptr) {
 

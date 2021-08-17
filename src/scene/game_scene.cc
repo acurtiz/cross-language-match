@@ -178,7 +178,12 @@ void GameScene::RunSingleIterationLoopBody() {
     word->Render();
   }
 
-  submit_button_->Render();
+  // We hide the submit button after the last round is completed; this signifies to the user that there are no
+  // remaining actions
+  if (!all_rounds_complete_) {
+    submit_button_->Render();
+  }
+
   return_button_->Render();
 
   if (current_round_is_complete_ && !all_rounds_complete_) {
